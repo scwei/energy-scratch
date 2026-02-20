@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ 靈魂印記・能量祝福刮刮樂 ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a1b9a;
+            --accent-color: #d4af37;
+            --bg-gradient: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        body {
+            font-family: "Noto Serif TC", serif;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .main-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(106, 27, 154, 0.2);
+            max-width: 450px;
+            width: 100%;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { font-family: 'Cinzel Decorative', cursive; color: var(--primary-color); font-size: 1.8rem; margin-bottom: 5px; }
+        .subtitle { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 25px; }
+
+        /* 刮刮樂區域 */
+        .scratch-card-wrapper {
+            position: relative;
+            width: 280px;
+            height: 140px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid var(--accent-color);
+        }
+
+        .prize-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: bold; color: var(--primary-color);
+            background: #fff; text-align: center; padding: 10px; box-sizing: border-box;
+        }
+
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 10; touch-action: none; cursor: crosshair; }
+
+        /* 表單區域 */
+        #info-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(106, 27, 154, 0.05);
+            border-radius: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus { border-color: var(--primary-color); }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #4a148c; transform: translateY(-2px); }
+        button:disabled { background: #ccc; }
+
+        .hidden { display: none !important; }
+        .status-msg { margin-top: 15px; font-weight: bold; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <h1>✨ 能量祝福 ✨</h1>
+    <p class="subtitle">靜心感受，刮出您的專屬指引</p>
+
+    <div class="scratch-card-wrapper">
+        <div id="prize-text" class="prize-layer">連結中...</div>
+        <canvas id="scratch-canvas" width="280" height="140"></canvas>
+    </div>
+
+    <div id="info-form" class="hidden">
+        <p style="margin:0; font-size: 0.9rem; color: var(--primary-color);">恭喜獲取祝福！請填寫資料以便聯繫領取：</p>
+        <input type="text" id="user-name" placeholder="您的姓名" required>
+        <input type="email" id="user-email" placeholder="您的 Email" required>
+        <button id="submit-btn" onclick="submitData()">領取能量祝福</button>
+    </div>
+
+    <div id="status" class="status-msg">請刮開上方金色區域</div>
+</div>
+
+<script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwi5iuc-COjsq5ab84OpRjgki3dRLXAFOywueWHCnq64FNbOVq0VpgcSVkz8x_Lb5yoiw/exec";
+
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    const prizeDiv = document.getElementById('prize-text');
+    const statusDiv = document.getElementById('status');
+    const infoForm = document.getElementById('info-form');
+
+    const prizes = [
+        { name: "👑 最大獎：慈心祝福迴向給您 X 7天", weight: 5 },
+        { name: "💖 二獎：身體能量療癒 x1次", weight: 15 },
+        { name: "🔮 三獎：檢測財氣能量，卡點1~2個", weight: 30 },
+        { name: "🌸 哈哈哈哈 (宇宙提醒您再接再厲)", weight: 50 }
+    ];
+
+    let isDrawing = false;
+    let isFinished = false;
+    let selectedPrizeName = "";
+
+    window.onload = () => {
+        const saved = localStorage.getItem('energy_scratch_done');
+        if (saved) {
+            showAlreadyScratched(saved);
+        } else {
+            initScratch();
+        }
+    };
+
+    function initScratch() {
+        const p = prizes[Math.floor(Math.random() * prizes.length)]; // 簡化邏輯，你也可以用之前的權重法
+        selectedPrizeName = p.name;
+        prizeDiv.innerHTML = selectedPrizeName.replace("：", "<br>");
+        
+        ctx.fillStyle = '#d4af37';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px "Noto Serif TC"';
+        ctx.textAlign = 'center';
+        ctx.fillText('✨ 輕刮此處 ✨', 140, 75);
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        window.addEventListener('mouseup', () => { if(isDrawing) { isDrawing = false; checkScrape(); } });
+        canvas.addEventListener('mousemove', scratch);
+        
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, {passive: false});
+        canvas.addEventListener('touchend', () => { isDrawing = false; checkScrape(); });
+        canvas.addEventListener('touchmove', scratch, {passive: false});
+    }
+
+    function scratch(e) {
+        if (!isDrawing || isFinished) return;
+        if(e.cancelable) e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 18, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function checkScrape() {
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let clear = 0;
+        for (let i = 3; i < pixels.length; i += 4) if (pixels[i] === 0) clear++;
+        if ((clear / (canvas.width * canvas.height)) > 0.4) {
+            isFinished = true;
+            canvas.style.opacity = '0';
+            setTimeout(() => {
+                canvas.classList.add('hidden');
+                statusDiv.innerText = "祝福顯化成功！";
+                infoForm.classList.remove('hidden');
+            }, 500);
+        }
+    }
+
+    function submitData() {
+        const name = document.getElementById('user-name').value;
+        const email = document.getElementById('user-email').value;
+        const btn = document.getElementById('submit-btn');
+
+        if (!name || !email) { alert("請填寫姓名與 Email 喔！"); return; }
+        
+        btn.disabled = true;
+        btn.innerText = "傳送能量中...";
+
+        const payload = {
+            name: name,
+            email: email,
+            prize: selectedPrizeName
+        };
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            localStorage.setItem('energy_scratch_done', selectedPrizeName);
+            infoForm.classList.add('hidden');
+            statusDiv.innerHTML = "✨ 紀錄成功！我們會盡快與您聯繫。 ✨";
+        })
+        .catch(() => {
+            statusDiv.innerText = "系統忙碌，請稍後再試。";
+            btn.disabled = false;
+        });
+    }
+
+    function showAlreadyScratched(prize) {
+        canvas.classList.add('hidden');
+        prizeDiv.innerHTML = prize.replace("：", "<br>");
+        statusDiv.innerText = "您已領取過今日的祝福囉！";
+        infoForm.classList.add('hidden');
+    }
+</script>
+
+</body>
+</html>
