@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧧 靈魂豐盛・願力顯化刮刮樂 🧧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --festive-red: #c62828;
+            --gold: #d4af37;
+            --healing-purple: #6a1b9a;
+            --bg-gradient: linear-gradient(135deg, #7b1fa2 0%, #c62828 100%);
+        }
+
+        body {
+            font-family: "Noto Serif TC", serif;
+            background: var(--bg-gradient);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box;
+        }
+
+        .main-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 30px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 480px; width: 100%;
+            border: 4px solid var(--gold);
+            position: relative;
+        }
+
+        h1 { font-family: 'Ma Shan Zheng', cursive; color: var(--festive-red); font-size: 2.3rem; margin: 0; }
+        .subtitle { font-size: 1rem; color: #555; margin: 10px 0 25px; font-weight: bold; line-height: 1.6; }
+
+        /* 分類按鈕優化：增加點擊範圍與觸感 */
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .cat-btn {
+            background: white; border: 2px solid var(--festive-red); padding: 18px 5px;
+            border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: bold;
+            color: var(--festive-red); transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent; /* 移除手機點擊藍色框 */
+        }
+        .cat-btn:active { transform: scale(0.95); background: var(--festive-red); color: white; }
+
+        /* 刮刮樂區域 */
+        .scratch-card-wrapper {
+            position: relative; width: 300px; height: 160px;
+            margin: 0 auto 20px; border-radius: 15px;
+            overflow: hidden; border: 4px solid var(--gold);
+            background: #fff; display: none;
+        }
+
+        .prize-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; line-height: 1.6; color: var(--healing-purple);
+            padding: 25px; box-sizing: border-box; text-align: center; font-weight: 700;
+        }
+
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 10; cursor: crosshair; touch-action: none; }
+        #status { margin-top: 15px; font-weight: bold; color: var(--festive-red); min-height: 1.5em; font-size: 1.1rem; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div style="font-size: 2rem; margin-bottom: 10px;">🧧 ✨ 💰</div>
+    <h1>靈魂豐盛指引</h1>
+    <p id="top-msg" class="subtitle">請選擇一個領域<br>領取宇宙今日給您的啟示</p>
+
+    <div id="category-screen" class="category-grid">
+        <button class="cat-btn" onclick="selectCategory('健康')">🍏 健康</button>
+        <button class="cat-btn" onclick="selectCategory('關係')">❤️ 關係</button>
+        <button class="cat-btn" onclick="selectCategory('心靈')">🧘 心靈</button>
+        <button class="cat-btn" onclick="selectCategory('事業')">🚀 事業</button>
+        <button class="cat-btn" onclick="selectCategory('財富')">💰 財富</button>
+        <button class="cat-btn" onclick="selectCategory('靈魂功課')">💎 靈魂功課</button>
+        <button class="cat-btn" style="grid-column: span 2;" onclick="selectCategory('重要決策')">⚖️ 重要決策要不要</button>
+    </div>
+
+    <div id="scratch-screen" class="scratch-card-wrapper">
+        <div id="prize-text" class="prize-layer"></div>
+        <canvas id="scratch-canvas" width="300" height="160"></canvas>
+    </div>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    // 完整的 252 條內容已經預載
+    const CONTENT_DATA = {
+        "健康": ["呼吸是最好的良藥，現在就深呼吸三次。","你的細胞正在聽你說話，對它們說聲「謝謝」。","休息不是浪費時間，是為了讓能量重新對齊。","身體的疼痛是靈魂的簡訊，請試著讀懂它。","喝一杯純淨的水，想像它正在淨化你的每個細胞。","所有的修復都發生在深度睡眠中，今晚早點睡。","放下大腦的焦慮，回到腳底與大地連結的感覺。","你的胃需要空間，試著只吃七分飽。","伸展你的脊椎，讓宇宙能量流動更順暢。","閉上眼，感受心臟跳動的力量，那是生命給你的禮物。","拒絕加工食物，就是拒絕混亂的頻率。","走進自然，森林的芬多精會修補你的氣場。","身體比大腦更誠實，聽從它的直覺。","每天流一點汗，排掉的不只是毒素，還有情緒。","溫柔地對待你的眼，看點遠方的綠意。","靜坐十分鐘，勝過昂貴的補品。","你的笑容是最好的免疫系統增強劑。","減少螢幕時間，增加與真實感官的連結。","腹式呼吸能瞬間降低你的壓力皮質醇。","把手放在不舒服的地方，送出慈愛的白光。","規律是身體的節奏，找到你的生命律動。","每一口食物都細嚼慢嚥，感受大地之母的滋養。","拒絕熬夜，那是對未來的自己借高利貸。","洗澡時想像水流帶走了一整天的負擔。","你的體態反映了你的心態，挺胸，迎向陽光。","減少糖分攝取，讓情緒保持在平穩的震動。","愛你的身體，無論它現在是什麼樣子。","每一根骨頭都支撐著你的夢想，感謝它們。","光著腳走在草地上，重新與地球定時。","聆聽輕柔的音樂，調整大腦的波長。","適度的斷食，是給腸胃一場神聖的假期。","體力是意志力的燃料，好好呵護它。","保持水分，你是水做的，流動才會清澈。","深層的放鬆，是最高層次的醫療。","別讓緊繃肩膀成為你的習慣動作。","今天，請給自己一個大大的擁抱。"],
+        "關係": ["每一段關係都是一面鏡子，映照出你內在的狀態。","先成為你想要吸引的那種人。","溝通前先深呼吸，從「心」出發而非從「情緒」出發。","設定健康的邊界，是愛自己也愛對方的表現。","原諒別人是為了放過自己，不再被舊能量綑綁。","真正的親密，來自於你敢在他人面前展現脆弱。","每個人都在用他「已知最好」的方式在生活。","停止期待別人來完整你，你本自具足。","用讚美取代批評，能量會瞬間提升。","有些人的出現只是為了教你一堂課，學完就放手。","練習聆聽，而不只是等待發言的機會。","給予而不求回報，愛才會形成完美的循環。","孤獨是與靈魂對話的機會，不需恐懼。","你的存在本身，就是對某些人最大的安慰。","爭吵時問自己：我想要「贏」，還是想要「愛」？","關係中的留白，是讓感情呼吸的空間。","感謝那些讓你痛苦的人，他們是你的反面導師。","溫柔的言語，能融化最堅硬的冰山。","不必討好每一個人，你不是為了別人的期待而活。","眼神的交流，勝過千言萬語。","放下控制欲，讓關係自然地生長。","每天對重要的人說聲「我愛你」或「謝謝」。","你的社交圈決定你的震動頻率，請謹慎選擇。","把「你為什麼不...」改成「我希望...」。","愛是動詞，需要透過具體的行動來顯現。","保持好奇心，即使是對相處很久的人。","拒絕情緒勒索，也不要勒索他人。","所有的衝突，底層都是對愛的需求。","擁抱時，感受兩顆心跳的同步。","關係的品質，取決於你對待自己的品質。","練習對他人展現慈悲，因為每個人都在經歷苦戰。","誠實是最高級的性感。","遠離消耗你能量的人，這不是自私，是自保。","共同的價值觀，是穩定關係的基石。","珍惜當下的陪伴，因為無常是唯一的常態。","愛不是佔有，愛是欣賞對方盛開的樣子。"],
+        "心靈": ["你不是你的想法，你是那個觀察想法的意識。","活在當下，因為那是唯一真實存在的時刻。","接納此時此刻的一切，痛苦就會減少一半。","心中若有風景，何處不是桃花源。","每天花五分鐘什麼都不做，只是存在著。","焦慮是為尚未發生的事情支付利息。","你的心是一片天空，情緒只是經過的雲。","所有的答案都在安靜中產生。","專注力是你最寶貴的資產。","放下對完美的執著，破碎也是一種美。","練習感恩，它會讓你的頻率從缺乏轉向豐盛。","相信宇宙的安排，即使當下看不清全貌。","恐懼的對面不是勇敢，而是「信任」。","你的內在小孩需要你的關注與安撫。","停止自我批評，你已經做得足夠好了。","靈魂不需要成功，靈魂只需要經歷。","保持初心，世界永遠是新鮮的。","平常心就是道。","每一朵花都在安靜中盛開，你也可以。","把心打開，奇蹟才有位置進來。","斷捨離不只是物品，還有過時的信念。","你的喜悅不應該建立在任何條件之上。","練習慈心禪：願我平安，願你平安，願眾生平安。","逆境是包裝醜陋的禮物。","所有的發生都是為了利益你。","心安理得，是最高級的奢侈品。","不隨境轉，你的心就是穩固的舵。","溫柔地對待你的負面情緒，問它想告訴你什麼。","智慧在沈默中生根，在行動中開花。","你的本質是光，沒有任何陰影能將它熄滅。","活出你自己的真實，那是對世界最好的貢獻。","簡單，是複雜之後的終極境界。","像孩子一樣去觀察一隻蝴蝶。","念頭是種子，選擇種下正向的種子。","宇宙從不犯錯，一切都在完美的節奏中。","回家，回到你內在那個永恆平靜的中心。"],
+        "事業": ["事業不是生存的苦役，而是你生命能量的延伸。","專注力是你最珍貴的資產，別把它隨意浪費在無效的干擾。","每一份工作任務，都是一場動態的正念冥想。","當你感到疲憊，是因為你在「對抗」而非「流動」。","最好的工作狀態是：身體放鬆，大腦專注，心靈慈悲。","所有的卓越都源於內心的寧靜，而非外界的嘈雜。","你的事業高度，取決於你內在能量的穩定度。","帶著覺察工作，連最微小的細節都能閃耀光芒。","專注於「給予」而非「獲取」，豐盛會自動找上門。","療癒你的金錢恐懼，事業的生命能量才會開始流動。","拒絕多工處理，一次只溫柔地做好一件事。","競爭是小我的幻象，貢獻是靈魂的真相。","成功的定義不是贏過別人，而是活出真正的自己。","在喧囂的會議中，記得回到自己的呼吸。","你的專業能力是軀殼，你的慈悲心才是靈魂。","每一筆收入，都是宇宙對你付出能量的感謝狀。","保持「初心」，那是你事業能量永不乾涸的源頭。","深度專注一小時，勝過焦慮地工作一整天。","你的事業不僅是賺錢，更是你在人間修行的道場。","減少不必要的言語，讓你的行動更有能量。","工作與生活的整合，來自於你對「當下」的全然接納。","帶著療癒他人的意圖去服務，你的事業將無堅不摧。","判斷力來自於清明的神智，而非混亂的忙碌。","解決問題的最高境界，是從源頭消融衝突。","你的生命能量在哪裡，你的成就就在哪裡。","每一位合作對象，都是來映照你內在狀態的導師。","練習在壓力中放鬆肩膀，那是你對身體的慈心祝福。","真正的領導力，是啟發他人內在的生命能量。","創業是關於「創造」，而非關於「佔有」。","當你不再證明自己，真正的力量才會顯現。","創意是在留白的空間裡，由靈魂親自寫下的答案。","拒絕消耗能量的邀約，是為了守護你事業的純粹.","把你的專長轉化為愛，這就是最成功的事業。","信任生命能量的節奏，有時前進，有時需要留白。","你的存在本身，就是這份事業最核心的價值。","今天，請帶著喜悅與正念，去創造你想要的世界。"],
+        "財富": ["金錢是價值的交換，先問自己：「我今天為世界創造了什麼價值？」","破解「金錢是罪惡」的迷思：財富是放大鏡，它會讓善良的人更有影響力。","觀察人性：人們不買產品，人們買的是「問題的解決方案」與「更好的自己」。","豐盛不是擁有很多，而是意識到自己「本自具足」並有能力給予。","務實行動：今天就記下每一筆支出，覺察你的能量流向了哪裡。","破解限制：別再說「我買不起」，改問「我要如何做才能擁有它？」。","市場不會對你的「努力」付費，市場只會對你的「成果」付費。","財富喜歡流動：帶著祝福付費，帶著感恩收錢。","真正的豐盛，是擁有拒絕不符合價值觀的賺錢機會的自由。","具體行動：投資你的大腦，這是唯一不會被通貨膨脹吃掉的資產。","人性需求是永恆的：安全、健康、愛與尊嚴。你的事業對應了哪一項？","匱乏感來自比較，豐盛感來自對當下擁有的深度覺察。","破解限制：你值得擁有財富，因為財富能讓你更好地服務世界。","務實了解市場：不要只做你喜歡的事，要做市場需要且你擅長的事。","複利不只在銀行，也在你每天微小的技能累積中。","給予是豐盛的起點：試著分享你的知識、時間或小額捐款。","財富的規模，取決於你解決問題的深度與受惠人數的廣度。","覺察你的金錢慣性：你是因為「恐懼」而存錢，還是因為「愛」而增值？","具體行動：清理你的錢包與財務報表，為新的能量騰出空間。","市場規律：在別人恐懼時保持清明，在別人貪婪時守住紀律。","破解限制：放下「賺錢很辛苦」的信條，試著「聰明地創造價值」。","財富是時間的槓桿：學會運用系統與工具，別只靠勞力換錢。","洞察需求：安靜聆聽客戶的抱怨，那裡藏著未被滿足的商機。","帶著「服務心」去談判，你會發現市場能量變得輕盈且順暢。","具體行動：今天就處理掉一筆困擾已久的債務或財務雜事。","內在豐盛會吸引外在財富，但外在行動才是顯化的橋樑。","破解限制：別讓過去的失敗定義你的身價。每一秒都是新的開始。","務實策略：建立緊急預備金，給靈魂一份安全感的燃料。","人性喜歡簡單：將你的產品或服務簡化到極致，就是價值。","覺察貪婪：當心跳加速、急於致富時，那是小我在干擾你的判斷。","具體行動：設定一個具體的財務目標，並寫下前三個小步驟。","財富是判斷力的副產品，而判斷力來自對現實的冷靜觀察。","練習慈心祝福：祝福那些比你富有的人，這會打破你的匱乏障壁。","市場沒有好壞，只有供需。找到你的定位，安靜地耕耘。","真正的富有，是即便失去所有金錢，你仍有重新創造財富的能力。","今天就行動：對幫助你創造財富的人（同事、客戶、伴侶）表達真誠感謝。"],
+        "靈魂功課": ["你來到這世上，是為了憶起你到底是誰。","所有的痛苦，都是靈魂覺醒的催化劑。","你遇見的每個人，都是你靈魂契約中的一部分。","重複出現的問題，是在提醒你還有未完成的功課。","放下「受害者」的角色，拿回你的「創造者」力量。","地球是一所學校，生活是你的課程。","靈魂不在乎成敗，它只在乎你是否學會了愛。","恐懼是你靈魂邊界的指標，跨過去就是成長。","業力不是懲罰，而是平衡與學習。","接納自己的陰影，那是完整自己的必經之路。","慈悲，是靈魂最高級的震動。","臣服於生命之流，不要與宇宙的節奏對抗。","你的直覺是靈魂的耳語，請信任它。","孤獨是靈魂在深呼吸。","所有的失去，都是為了騰出空間給更好的安排。","這一世的功課，就是學會勇敢地做自己。","寬恕是斬斷靈魂枷鎖的最快方式。","你的存在本身就是一種意義，不需證明。","苦難中隱藏著智慧的寶藏，請耐心挖掘。","靈魂沒有時間感，只有當下的純粹體驗。","尋找內在的平靜，那是你真正的家。","服務他人，是靈魂最高形式的表達。","你的身體是借來的，靈魂才是永恆的。","學會分辨「小我」的慾望與「大我」的呼喚。","所有的恐懼底層，都是對死亡的誤解。","靈魂喜歡玩耍，別把人生過得太嚴肅。","你現在經歷的，正是你靈魂當下最需要的。","靜修不是逃避，是為了更有力量地回歸。","愛是唯一的真實，其他都是幻象。","保持靈魂的純真，即使看透了世俗。","你是全宇宙寵愛著的，從未孤單。","向內看，那裡有你尋找的所有寶藏。","生命的意義，是由你賦予它的。","在平凡中看見神聖。","你的靈魂選擇了這個時代、這個家庭、這個身體。","最終，我們都只是互相陪伴回家。"],
+        "重要決策": ["如果現在讓你感到胸口緊繃，請先緩一緩。","如果這是一個「還可以」的選擇，那它就是一個「不」。","詢問你的心，而不是詢問你的恐懼。","在安靜的森林或安靜的房間裡做決定。","想像十年後的你，會如何看待現在的這個選擇？","如果不考慮錢，你會怎麼選？那就是你的答案。","投一枚硬幣，在硬幣落地前，你希望它是哪一面？","好的決定會讓你感到平靜，而不是興奮。","暫時放下，去睡一覺，醒來答案會更清晰。","尋求三位智者的意見，但最後聽自己的。","如果這個決定是基於愛而非恐懼，那就去做吧。","宇宙喜歡行動，一旦決定了，就全心投入。","現在不是最好的時機，再等待一個月亮週期。","Yes！大膽地往前走，支援已經在路上了。","減少選項，過多的選擇會消耗你的能量。","問問自己：這個決定符合我的核心價值觀嗎？","身體會告訴你答案：擴張感是「對」，縮小感是「錯」。","慢慢來，比較快。","這個決策是否能讓你更有自由？","不要為了逃避現在而做決定。","答案就在你的夢境裡，請留意。","先做一個小的實驗，再決定是否全面投入。","相信你的第一直覺，後面的都是腦袋的干擾。","如果你猶豫不決，表示你還沒準備好。","向宇宙發出請求，請它給你一個明確的信號。","這個決定是否能為更多人帶來福祉？","勇敢地說「不」，是為了對更重要的事說「好」。","所有的路徑最終都會通往成長。","別人的建議是參考，你才是你人生的機長。","寫下優缺點，但最後用直覺來決定。","當下即是最佳時機。","繞一點路也沒關係，風景可能更美。","放下對結果的執著，專注於當下的行動。","你的靈魂已經知道答案了。","走那條讓你感到更有生命力的路。","微笑，然後出發。"]
+    };
+
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwi5iuc-COjsq5ab84OpRjgki3dRLXAFOywueWHCnq64FNbOVq0VpgcSVkz8x_Lb5yoiw/exec";
+
+    let selectedCat = "";
+    let selectedContent = "";
+    let isFinished = false;
+
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    const prizeDiv = document.getElementById('prize-text');
+    const statusDiv = document.getElementById('status');
+
+    function selectCategory(cat) {
+        console.log("Selected Category:", cat); // 調試用
+        selectedCat = cat;
+        const list = CONTENT_DATA[cat];
+        selectedContent = list[Math.floor(Math.random() * list.length)];
+        
+        document.getElementById('category-screen').classList.add('hidden');
+        document.getElementById('scratch-screen').style.display = 'block';
+        document.getElementById('top-msg').innerHTML = `已連結【${cat}】能量<br>請在金色區域刮開啟示`;
+        
+        initScratch();
+    }
+
+    function initScratch() {
+        prizeDiv.innerText = selectedContent;
+        ctx.fillStyle = '#d4af37';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#c62828';
+        ctx.font = 'bold 20px "Noto Serif TC"';
+        ctx.textAlign = 'center';
+        ctx.fillText('🧧 刮開顯化啟示 🧧', 150, 90);
+
+        // 桌面端事件
+        canvas.addEventListener('mousedown', startScratch);
+        canvas.addEventListener('mousemove', scratch);
+        window.addEventListener('mouseup', stopScratch);
+        // 手機端事件
+        canvas.addEventListener('touchstart', startScratch, {passive:false});
+        canvas.addEventListener('touchmove', scratch, {passive:false});
+        canvas.addEventListener('touchend', stopScratch);
+    }
+
+    let isDrawing = false;
+    function startScratch(e) { isDrawing = true; scratch(e); }
+    function stopScratch() { if(isDrawing) { isDrawing = false; checkScrape(); } }
+
+    function scratch(e) {
+        if (!isDrawing || isFinished) return;
+        if(e.cancelable) e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function checkScrape() {
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let clear = 0;
+        for (let i = 3; i < pixels.length; i += 4) if (pixels[i] === 0) clear++;
+        
+        if ((clear / (canvas.width * canvas.height)) > 0.45) {
+            isFinished = true;
+            canvas.style.transition = 'opacity 0.6s';
+            canvas.style.opacity = '0';
+            setTimeout(autoRecord, 600);
+        }
+    }
+
+    function autoRecord() {
+        canvas.classList.add('hidden');
+        statusDiv.innerText = "✨ 正在將指引同步至靈魂帳簿...";
+        
+        if (GOOGLE_SCRIPT_URL.includes("貼在這裡")) {
+            statusDiv.innerHTML = "🙏 啟示已顯化，請細細品味。(尚未設定紀錄網址)";
+            return;
+        }
+
+        const payload = { category: selectedCat, content: selectedContent };
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(payload)
+        }).then(() => {
+            statusDiv.innerHTML = "🙏 記錄成功。願這份啟示陪伴您的今日。";
+        }).catch(() => {
+            statusDiv.innerText = "指引已顯化 (網路稍微波動，不影響結果)";
+        });
+    }
+</script>
+
+</body>
+</html>
