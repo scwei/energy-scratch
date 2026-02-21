@@ -18,14 +18,30 @@
             color: #333; line-height: 1.6;
         }
 
-        /* 介面切換控制 */
         .page { display: none; width: 100%; max-width: 500px; text-align: center; }
         .page.active { display: block; }
 
         header h1 { color: #2c5d4d; font-size: 1.6rem; margin-bottom: 10px; }
-        .instruction-box { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .instruction-box ol { text-align: left; display: inline-block; padding-left: 20px; margin: 0; }
-        .meditation-tip { color: var(--primary-color); font-weight: bold; margin: 15px 0; font-style: italic; }
+        
+        /* 首頁說明文字樣式 */
+        .instruction-box { 
+            background: white; 
+            padding: 25px 20px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            text-align: left;
+        }
+        .instruction-box ol { padding-left: 25px; margin: 0; }
+        .instruction-box li { margin-bottom: 15px; font-weight: bold; }
+        .meditation-quote { 
+            display: block; 
+            font-weight: normal; 
+            color: var(--primary-color); 
+            font-style: italic; 
+            margin-top: 5px; 
+            font-size: 0.95rem;
+        }
 
         /* 分類選擇 */
         .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
@@ -56,7 +72,7 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 30px; box-sizing: border-box; text-align: center;
         }
-        .result-content p { margin: 10px 0; font-size: 1rem; }
+        .result-content p { margin: 12px 0; font-size: 1rem; }
         .result-content strong { color: var(--primary-color); display: block; margin-bottom: 5px; }
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
@@ -77,11 +93,12 @@
         
         <div class="instruction-box">
             <ol>
-                <li>正念冥想 30 秒 (請閉上眼感受呼吸)</li>
+                <li>正念冥想 30 秒 (請閉上眼感受呼吸)
+                    <span class="meditation-quote">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</span>
+                </li>
                 <li>邀請您優先選擇三個最關心的議題</li>
                 <li>帶著覺知，刮出您的正念心靈卡</li>
             </ol>
-            <p class="meditation-tip">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</p>
         </div>
 
         <div class="category-grid" id="catGrid">
@@ -95,7 +112,7 @@
             <div class="cat-item" data-cat="工作">工作</div>
             <div class="cat-item" data-cat="情緒">情緒</div>
         </div>
-        <p id="counter" style="margin-top:15px; font-size:0.8rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
+        <p id="counter" style="margin-top:15px; font-size:0.85rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
     </div>
 
     <div id="scratch-page" class="page">
@@ -128,7 +145,6 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzLYgoIPlt_XHe8yZ8iVuc392FDcSXQDnzszBZxNjNZA5r7j1k2mZ0kVdS_GnGNX-2m/exec";
         
-        // 金句庫 (簡化版，您可自行補齊至300句)
         const quotesData = {
             "專注力": ["專注於呼吸，就是給生命最好的禮物。", "一次只做一件事，心就不會累。", "你的心在哪裡，力量就在哪裡。"],
             "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念。"],
@@ -167,7 +183,6 @@
             document.getElementById('home-page').classList.remove('active');
             document.getElementById('scratch-page').classList.add('active');
             
-            // 生成結果
             const results = selected.map(c => {
                 const pool = quotesData[c];
                 const q = pool[Math.floor(Math.random() * pool.length)];
@@ -185,15 +200,12 @@
             const ctx = canvas.getContext('2d');
             canvas.width = 320; canvas.height = 450;
             
-            // 銀色遮罩層
             ctx.fillStyle = '#C0C0C0';
             ctx.fillRect(0, 0, 320, 450);
             
-            // 隨機紋理
             ctx.fillStyle = '#A9A9A9';
             for(let i=0; i<100; i++) ctx.fillRect(Math.random()*320, Math.random()*450, 2, 2);
             
-            // 提示字
             ctx.font = "20px Arial";
             ctx.fillStyle = "#888";
             ctx.textAlign = "center";
@@ -219,7 +231,6 @@
             canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
         }
 
-        // 面積檢查：超過 50% 自動揭曉
         function checkArea(ctx, canvas) {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const pixels = imageData.data;
@@ -228,7 +239,7 @@
                 if (pixels[i] === 0) transparent++;
             }
             const percent = (transparent / (canvas.width * canvas.height)) * 100;
-            if (percent > 50) {
+            if (percent > 50) { // 超過 50% 自動揭曉
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 document.getElementById('action-area').style.display = 'block';
             }
