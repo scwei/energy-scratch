@@ -22,9 +22,10 @@
         .page { display: none; width: 100%; max-width: 500px; text-align: center; }
         .page.active { display: block; }
 
-        header h1 { color: #2c5d4d; font-size: 1.5rem; margin-bottom: 20px; }
+        header h1 { color: #2c5d4d; font-size: 1.6rem; margin-bottom: 10px; }
         .instruction-box { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .instruction-box ol { text-align: left; display: inline-block; }
+        .instruction-box ol { text-align: left; display: inline-block; padding-left: 20px; margin: 0; }
+        .meditation-tip { color: var(--primary-color); font-weight: bold; margin: 15px 0; font-style: italic; }
 
         /* 分類選擇 */
         .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
@@ -32,7 +33,17 @@
             padding: 15px 5px; background: white; border-radius: 12px; border: 2px solid #ddd;
             cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 0.9rem;
         }
-        .cat-item.selected { border-color: var(--primary-color); background: #e8f3f0; color: var(--primary-color); transform: scale(1.05); }
+        /* 各類別選中色彩 */
+        .cat-item.selected { transform: scale(1.05); border-width: 3px; }
+        .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
+        .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
+        .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
+        .cat-item[data-cat="關係"].selected { border-color: #ffb6b9; color: #ffb6b9; background: #fff0f0; }
+        .cat-item[data-cat="照顧者"].selected { border-color: #00a8cc; color: #00a8cc; background: #f0faff; }
+        .cat-item[data-cat="復原力"].selected { border-color: #a39193; color: #a39193; background: #f4f1f1; }
+        .cat-item[data-cat="健康"].selected { border-color: #81b214; color: #81b214; background: #f5f9ed; }
+        .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
+        .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
 
         /* 刮刮樂卡片 */
         #scratch-card {
@@ -45,38 +56,46 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 30px; box-sizing: border-box; text-align: center;
         }
+        .result-content p { margin: 10px 0; font-size: 1rem; }
+        .result-content strong { color: var(--primary-color); display: block; margin-bottom: 5px; }
+
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
         /* 按鈕與連結 */
         .btn { padding: 12px 30px; border-radius: 30px; border: none; background: var(--primary-color); color: white; cursor: pointer; font-size: 1rem; margin: 10px 0; }
-        .line-btn { background: #06C755; display: block; text-decoration: none; font-weight: bold; width: 200px; margin: 10px auto; }
+        .line-btn { background: #06C755; display: block; text-decoration: none; font-weight: bold; width: 250px; margin: 15px auto; }
         
         .footer-links { margin-top: 40px; border-top: 1px solid #ddd; padding: 20px; font-size: 0.9rem; width: 100%; max-width: 500px; text-align: left; }
-        .footer-links h4 { margin-bottom: 8px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 10px; }
-        .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 5px 0; }
-        
-        /* 語音與靜心提示 */
-        #meditation-overlay { font-style: italic; color: var(--primary-color); margin: 10px 0; min-height: 24px; }
+        .footer-links h4 { margin-bottom: 8px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 10px; margin-top: 20px; }
+        .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 8px 0; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
     </style>
 </head>
 <body>
 
     <div id="home-page" class="page active">
         <header><h1>2026 刮刮樂 - 正念我的心</h1></header>
+        
         <div class="instruction-box">
             <ol>
-                <li>正念冥想 30 秒</li>
-                <li>優先選擇三個最關心的議題</li>
+                <li>正念冥想 30 秒 (請閉上眼感受呼吸)</li>
+                <li>邀請您優先選擇三個最關心的議題</li>
                 <li>帶著覺知，刮出您的正念心靈卡</li>
             </ol>
+            <p class="meditation-tip">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</p>
         </div>
-        <button class="btn" onclick="startExperience()">開始靜心體驗</button>
-        
-        <div id="selection-area" style="display:none; margin-top: 20px;">
-            <p id="meditation-overlay"></p>
-            <div class="category-grid" id="catGrid">
-                </div>
+
+        <div class="category-grid" id="catGrid">
+            <div class="cat-item" data-cat="專注力">專注力</div>
+            <div class="cat-item" data-cat="覺察力">覺察力</div>
+            <div class="cat-item" data-cat="創造力">創造力</div>
+            <div class="cat-item" data-cat="關係">關係</div>
+            <div class="cat-item" data-cat="照顧者">照顧者</div>
+            <div class="cat-item" data-cat="復原力">復原力</div>
+            <div class="cat-item" data-cat="健康">健康</div>
+            <div class="cat-item" data-cat="工作">工作</div>
+            <div class="cat-item" data-cat="情緒">情緒</div>
         </div>
+        <p id="counter" style="margin-top:15px; font-size:0.8rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
     </div>
 
     <div id="scratch-page" class="page">
@@ -89,7 +108,7 @@
         
         <div id="action-area" style="display:none;">
             <a href="#" class="btn line-btn" onclick="shareLine()">🍀 LINE 分享祝福</a>
-            <button class="btn" style="background:#888" onclick="location.reload()">重新選擇</button>
+            <button class="btn" style="background:#888" onclick="location.reload()">重新選擇議題</button>
         </div>
     </div>
 
@@ -108,10 +127,8 @@
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzLYgoIPlt_XHe8yZ8iVuc392FDcSXQDnzszBZxNjNZA5r7j1k2mZ0kVdS_GnGNX-2m/exec";
-        const cats = ["專注力", "覺察力", "創造力", "關係", "照顧者", "復原力", "健康", "工作", "情緒"];
-        let selected = [];
-
-        // 模擬金句資料庫（部分範例）
+        
+        // 金句庫 (簡化版，您可自行補齊至300句)
         const quotesData = {
             "專注力": ["專注於呼吸，就是給生命最好的禮物。", "一次只做一件事，心就不會累。", "你的心在哪裡，力量就在哪裡。"],
             "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念。"],
@@ -124,83 +141,63 @@
             "情緒": ["情緒如浪，來去自如，而你是大海。", "焦慮是靈魂跑得太快，停下來等它。", "快樂很好，不快樂也沒關係。"]
         };
 
-        function startExperience() {
-            document.querySelector('#home-page > button').style.display = 'none';
-            document.getElementById('selection-area').style.display = 'block';
-            speakGuide();
-        }
+        let selected = [];
+        const items = document.querySelectorAll('.cat-item');
 
-        // 語音引導功能
-        function speakGuide() {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = "好，我們現在來做30秒的靜心冥想，輕輕的把眼睛閉上，感受一下自己現在身體的感覺、呼吸的節奏、當您準備好時，可以張開眼睛，選擇您關心的三個類別";
-            msg.lang = 'zh-TW';
-            msg.rate = 0.85; // 語速慢一點更溫柔
-            
-            // 尋找女聲
-            const voices = window.speechSynthesis.getVoices();
-            const femaleVoice = voices.find(v => v.name.includes('Google 國語') || v.name.includes('Ya-Ling') || v.name.includes('Mei-Jia'));
-            if(femaleVoice) msg.voice = femaleVoice;
-
-            window.speechSynthesis.speak(msg);
-            
-            // 畫面上顯示冥想提示
-            const tip = document.getElementById('meditation-overlay');
-            tip.innerText = "🧘 正在引導靜心冥想中...";
-            setTimeout(() => { tip.innerText = "✨ 請選擇您關心的三個議題"; buildGrid(); }, 5000); // 這裡縮短展示，實際可配合語音
-        }
-
-        function buildGrid() {
-            const grid = document.getElementById('catGrid');
-            grid.innerHTML = "";
-            cats.forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'cat-item';
-                div.innerText = c;
-                div.onclick = () => selectCat(c, div);
-                grid.appendChild(div);
-            });
-        }
-
-        function selectCat(name, el) {
-            if(selected.includes(name)) {
-                selected = selected.filter(i => i !== name);
-                el.classList.remove('selected');
-            } else if(selected.length < 3) {
-                selected.push(name);
-                el.classList.add('selected');
-                if(selected.length === 3) {
-                    setTimeout(goToScratch, 500); // 選完自動跳轉
+        items.forEach(item => {
+            item.onclick = () => {
+                const name = item.getAttribute('data-cat');
+                if (selected.includes(name)) {
+                    selected = selected.filter(i => i !== name);
+                    item.classList.remove('selected');
+                } else if (selected.length < 3) {
+                    selected.push(name);
+                    item.classList.add('selected');
                 }
-            }
-        }
+                
+                document.getElementById('counter').innerText = `請選擇 3 個議題 (已選: ${selected.length}/3)`;
+                
+                if (selected.length === 3) {
+                    setTimeout(goToScratch, 600);
+                }
+            };
+        });
 
         function goToScratch() {
             document.getElementById('home-page').classList.remove('active');
             document.getElementById('scratch-page').classList.add('active');
             
+            // 生成結果
             const results = selected.map(c => {
-                const p = quotesData[c];
-                return `<p><strong>#${c}</strong><br>${p[Math.floor(Math.random()*p.length)]}</p>`;
+                const pool = quotesData[c];
+                const q = pool[Math.floor(Math.random() * pool.length)];
+                return `<p><strong># ${c}</strong>${q}</p>`;
             }).join("");
+            
             document.getElementById('resultContainer').innerHTML = results + "<hr><p style='font-size:0.8rem; color:var(--primary-color)'>願這份正念陪伴您的 2026</p>";
             
             initCanvas();
             logToSheet();
         }
 
-        // 刮刮樂畫布邏輯
         function initCanvas() {
             const canvas = document.getElementById('scratchCanvas');
             const ctx = canvas.getContext('2d');
             canvas.width = 320; canvas.height = 450;
             
+            // 銀色遮罩層
             ctx.fillStyle = '#C0C0C0';
             ctx.fillRect(0, 0, 320, 450);
             
-            // 畫點裝飾
+            // 隨機紋理
             ctx.fillStyle = '#A9A9A9';
-            for(let i=0; i<80; i++) ctx.fillRect(Math.random()*320, Math.random()*450, 2, 2);
+            for(let i=0; i<100; i++) ctx.fillRect(Math.random()*320, Math.random()*450, 2, 2);
+            
+            // 提示字
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "#888";
+            ctx.textAlign = "center";
+            ctx.fillText("帶著覺知刮開卡片", 160, 225);
 
             let isDrawing = false;
             
@@ -210,20 +207,20 @@
                 const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
                 const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
                 ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI*2); ctx.fill();
-                handleAreaCheck(ctx, canvas);
+                ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI*2); ctx.fill();
+                checkArea(ctx, canvas);
             }
 
             canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('touchstart', () => isDrawing = true);
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
             window.addEventListener('mouseup', () => isDrawing = false);
             window.addEventListener('touchend', () => isDrawing = false);
             canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('touchmove', scratch);
+            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
         }
 
-        // 面積檢查：超過 40% 自動散開
-        function handleAreaCheck(ctx, canvas) {
+        // 面積檢查：超過 50% 自動揭曉
+        function checkArea(ctx, canvas) {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const pixels = imageData.data;
             let transparent = 0;
@@ -231,7 +228,7 @@
                 if (pixels[i] === 0) transparent++;
             }
             const percent = (transparent / (canvas.width * canvas.height)) * 100;
-            if (percent > 40) {
+            if (percent > 50) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 document.getElementById('action-area').style.display = 'block';
             }
@@ -248,12 +245,12 @@
                     content: document.getElementById('resultContainer').innerText.replace(/\n/g, " ")
                 };
                 fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            } catch(e) { console.error(e); }
+            } catch(e) { console.error("Log failed", e); }
         }
 
         function shareLine() {
             const url = "https://scwei.github.io/energy-scratch/wish.html";
-            const text = `2026刮刮樂- 正念我的心\n\n1. 正念冥想1分鐘\n2. 邀請您優先選擇三個最關心的議題\n(專注力、覺察力、創造力、關係、照顧者、復原力、健康、工作、情緒)\n\n3. 帶著覺知，刮出您的正念心靈卡\n\n遊戲網址：${url}`;
+            const text = `2026刮刮樂- 正念我的心\n\n1. 正念冥想1分鐘\n2. 邀請您優先選擇三個最關心的議題\n(專注力、覺察力、創造力、關係、照顧者、復原力、健康、工作、情緒)\n\n3. 帶著覺知，刮出您的正念心靈卡\n\n2026刮刮樂- 正念我的心 -遊戲網址：${url}`;
             window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
         }
     </script>
