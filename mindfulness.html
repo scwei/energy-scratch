@@ -56,7 +56,7 @@
             cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem;
         }
         .cat-item.selected { transform: scale(1.03); border-width: 3px; }
-        /* 各類別選中色彩保持不變 */
+        /* 各類別選中色彩 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -67,7 +67,7 @@
         .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
         .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
 
-        /* 重要：刮刮樂卡片手機版高度自適應優化 */
+        /* 卡片區域：確保垂直置中 */
         #scratch-card {
             width: 100%; max-width: 320px; 
             min-height: 420px; 
@@ -77,18 +77,43 @@
         }
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: flex-start; /* 頂部對齊防止截斷 */
+            display: flex; flex-direction: column; 
+            justify-content: center; /* 修正：使內容垂直置中 */
             align-items: center; padding: 25px 20px; box-sizing: border-box; 
-            text-align: center; overflow-y: auto; /* 若內容過長可滾動 */
+            text-align: center; overflow-y: auto;
         }
         .quote-box { margin-bottom: 15px; width: 100%; }
-        .quote-box p { margin: 5px 0; font-size: 0.95rem; line-height: 1.4; }
+        .quote-box p { margin: 5px 0; font-size: 1rem; line-height: 1.4; }
         .quote-box strong { color: var(--primary-color); display: block; margin-bottom: 2px; font-size: 0.8rem; }
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
-        .btn { padding: 12px 25px; border-radius: 30px; border: none; background: var(--primary-color); color: white; cursor: pointer; font-size: 1rem; margin: 10px 0; width: 100%; max-width: 280px; }
-        .line-btn { background: #06C755; display: block; text-decoration: none; font-weight: bold; }
+        /* 按鈕區域：修正不置中問題 */
+        #action-area {
+            display: none;
+            flex-direction: column;
+            align-items: center; /* 確保子元素水平置中 */
+            width: 100%;
+        }
+        .btn { 
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 25px; 
+            border-radius: 30px; 
+            border: none; 
+            background: var(--primary-color); 
+            color: white; 
+            cursor: pointer; 
+            font-size: 1rem; 
+            margin: 10px auto; /* 確保按鈕本身置中 */
+            width: 90%; 
+            max-width: 280px;
+            box-sizing: border-box;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .line-btn { background: #06C755 !important; }
         
         .footer-links { margin-top: 30px; border-top: 1px solid #ddd; padding: 20px 10px; font-size: 0.85rem; width: 100%; max-width: 450px; text-align: left; }
         .footer-links h4 { margin-bottom: 6px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 8px; margin-top: 15px; }
@@ -131,8 +156,8 @@
             <canvas id="scratchCanvas"></canvas>
         </div>
         
-        <div id="action-area" style="display:none;">
-            <a href="#" class="btn line-btn" onclick="shareLine()">🍀 LINE 分享祝福</a>
+        <div id="action-area">
+            <a href="#" class="btn line-btn" id="lineBtn" onclick="shareLine()">🍀 LINE 分享祝福</a>
             <button class="btn" style="background:#888" onclick="location.reload()">重新選擇議題</button>
         </div>
     </div>
@@ -185,6 +210,7 @@
         function goToScratch() {
             document.getElementById('home-page').classList.remove('active');
             document.getElementById('scratch-page').classList.add('active');
+            document.getElementById('action-area').style.display = 'none'; // 初始隱藏
             
             const results = selected.map(c => {
                 const pool = quotesData[c];
@@ -238,7 +264,7 @@
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) transparent++; }
             if ((transparent / (canvas.width * canvas.height)) * 100 > 50) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                document.getElementById('action-area').style.display = 'block';
+                document.getElementById('action-area').style.display = 'flex'; // 顯示並維持 Flex 居中
                 gtag('event', 'scratch_complete');
             }
         }
