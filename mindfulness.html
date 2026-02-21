@@ -21,41 +21,42 @@
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
-            margin: 0; padding: 20px;
+            margin: 0; padding: 15px;
             display: flex; flex-direction: column; align-items: center;
-            color: #333; line-height: 1.6;
+            color: #333; line-height: 1.5;
         }
 
-        .page { display: none; width: 100%; max-width: 500px; text-align: center; }
+        .page { display: none; width: 100%; max-width: 450px; text-align: center; }
         .page.active { display: block; }
 
-        header h1 { color: #2c5d4d; font-size: 1.6rem; margin-bottom: 10px; }
+        header h1 { color: #2c5d4d; font-size: 1.4rem; margin-bottom: 10px; }
         
         .instruction-box { 
             background: white; 
-            padding: 25px 20px; 
+            padding: 20px 15px; 
             border-radius: 15px; 
-            margin-bottom: 25px; 
+            margin-bottom: 20px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
             text-align: left;
         }
-        .instruction-box ol { padding-left: 25px; margin: 0; }
-        .instruction-box li { margin-bottom: 15px; font-weight: bold; }
+        .instruction-box ol { padding-left: 20px; margin: 0; }
+        .instruction-box li { margin-bottom: 12px; font-weight: bold; font-size: 0.95rem; }
         .meditation-quote { 
             display: block; 
             font-weight: normal; 
             color: var(--primary-color); 
             font-style: italic; 
             margin-top: 5px; 
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
-        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
         .cat-item {
-            padding: 15px 5px; background: white; border-radius: 12px; border: 2px solid #ddd;
-            cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 0.9rem;
+            padding: 12px 2px; background: white; border-radius: 10px; border: 2px solid #ddd;
+            cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem;
         }
-        .cat-item.selected { transform: scale(1.05); border-width: 3px; }
+        .cat-item.selected { transform: scale(1.03); border-width: 3px; }
+        /* 各類別選中色彩保持不變 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -66,27 +67,32 @@
         .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
         .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
 
+        /* 重要：刮刮樂卡片手機版高度自適應優化 */
         #scratch-card {
-            width: 320px; height: 450px; background: white; margin: 20px auto;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%; max-width: 320px; 
+            min-height: 420px; 
+            background: white; margin: 15px auto;
+            border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             position: relative; overflow: hidden;
         }
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px; box-sizing: border-box; text-align: center;
+            display: flex; flex-direction: column; justify-content: flex-start; /* 頂部對齊防止截斷 */
+            align-items: center; padding: 25px 20px; box-sizing: border-box; 
+            text-align: center; overflow-y: auto; /* 若內容過長可滾動 */
         }
-        .result-content p { margin: 12px 0; font-size: 1rem; }
-        .result-content strong { color: var(--primary-color); display: block; margin-bottom: 5px; }
+        .quote-box { margin-bottom: 15px; width: 100%; }
+        .quote-box p { margin: 5px 0; font-size: 0.95rem; line-height: 1.4; }
+        .quote-box strong { color: var(--primary-color); display: block; margin-bottom: 2px; font-size: 0.8rem; }
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
-        .btn { padding: 12px 30px; border-radius: 30px; border: none; background: var(--primary-color); color: white; cursor: pointer; font-size: 1rem; margin: 10px 0; }
-        .line-btn { background: #06C755; display: block; text-decoration: none; font-weight: bold; width: 250px; margin: 15px auto; }
+        .btn { padding: 12px 25px; border-radius: 30px; border: none; background: var(--primary-color); color: white; cursor: pointer; font-size: 1rem; margin: 10px 0; width: 100%; max-width: 280px; }
+        .line-btn { background: #06C755; display: block; text-decoration: none; font-weight: bold; }
         
-        .footer-links { margin-top: 40px; border-top: 1px solid #ddd; padding: 20px; font-size: 0.9rem; width: 100%; max-width: 500px; text-align: left; }
-        .footer-links h4 { margin-bottom: 8px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 10px; margin-top: 20px; }
-        .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 8px 0; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
+        .footer-links { margin-top: 30px; border-top: 1px solid #ddd; padding: 20px 10px; font-size: 0.85rem; width: 100%; max-width: 450px; text-align: left; }
+        .footer-links h4 { margin-bottom: 6px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 8px; margin-top: 15px; }
+        .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 6px 0; border-bottom: 1px dashed #eee; padding-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -96,10 +102,10 @@
         
         <div class="instruction-box">
             <ol>
-                <li>正念冥想 30 秒 (請閉上眼感受呼吸)
+                <li>正念冥想 30 秒
                     <span class="meditation-quote">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</span>
                 </li>
-                <li>邀請您優先選擇三個最關心的議題</li>
+                <li>選擇三個最關心的議題</li>
                 <li>帶著覺知，刮出您的正念心靈卡</li>
             </ol>
         </div>
@@ -115,11 +121,11 @@
             <div class="cat-item" data-cat="工作">工作</div>
             <div class="cat-item" data-cat="情緒">情緒</div>
         </div>
-        <p id="counter" style="margin-top:15px; font-size:0.85rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
+        <p id="counter" style="margin-top:12px; font-size:0.8rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
     </div>
 
     <div id="scratch-page" class="page">
-        <h1>帶著覺知，刮出您的正念心靈卡</h1>
+        <header><h1>帶著覺知，刮出您的正念心靈卡</h1></header>
         <div id="scratch-card">
             <div class="result-content" id="resultContainer"></div>
             <canvas id="scratchCanvas"></canvas>
@@ -169,12 +175,10 @@
                 } else if (selected.length < 3) {
                     selected.push(name);
                     item.classList.add('selected');
-                    // GA 點擊追蹤
                     gtag('event', 'select_category', { 'category_name': name });
                 }
-                
                 document.getElementById('counter').innerText = `請選擇 3 個議題 (已選: ${selected.length}/3)`;
-                if (selected.length === 3) setTimeout(goToScratch, 600);
+                if (selected.length === 3) setTimeout(goToScratch, 500);
             };
         });
 
@@ -185,27 +189,29 @@
             const results = selected.map(c => {
                 const pool = quotesData[c];
                 const q = pool[Math.floor(Math.random() * pool.length)];
-                return `<p><strong># ${c}</strong>${q}</p>`;
+                return `<div class="quote-box"><strong># ${c}</strong><p>${q}</p></div>`;
             }).join("");
             
-            document.getElementById('resultContainer').innerHTML = results + "<hr><p style='font-size:0.8rem; color:var(--primary-color)'>願這份正念陪伴您的 2026</p>";
+            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px;'>願這份正念陪伴您的 2026</p>";
             
             initCanvas();
             logToSheet();
-            // GA 跳轉追蹤
             gtag('event', 'start_scratch', { 'selected_topics': selected.join(', ') });
         }
 
         function initCanvas() {
             const canvas = document.getElementById('scratchCanvas');
+            const card = document.getElementById('scratch-card');
             const ctx = canvas.getContext('2d');
-            canvas.width = 320; canvas.height = 450;
+            canvas.width = card.offsetWidth; 
+            canvas.height = card.offsetHeight;
+            
             ctx.fillStyle = '#C0C0C0';
-            ctx.fillRect(0, 0, 320, 450);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#A9A9A9';
-            for(let i=0; i<100; i++) ctx.fillRect(Math.random()*320, Math.random()*450, 2, 2);
-            ctx.font = "20px Arial"; ctx.fillStyle = "#888"; ctx.textAlign = "center";
-            ctx.fillText("帶著覺知刮開卡片", 160, 225);
+            for(let i=0; i<100; i++) ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
+            ctx.font = "18px Arial"; ctx.fillStyle = "#888"; ctx.textAlign = "center";
+            ctx.fillText("帶著覺知刮開卡片", canvas.width/2, canvas.height/2);
 
             let isDrawing = false;
             function scratch(e) {
@@ -233,7 +239,6 @@
             if ((transparent / (canvas.width * canvas.height)) * 100 > 50) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 document.getElementById('action-area').style.display = 'block';
-                // GA 完成刮獎追蹤
                 gtag('event', 'scratch_complete');
             }
         }
@@ -253,9 +258,8 @@
         }
 
         function shareLine() {
-            const url = "https://scwei.github.io/energy-scratch/wish.html";
-            const text = `2026刮刮樂- 正念我的心\n\n1. 正念冥想1分鐘\n2. 邀請您優先選擇三個最關心的議題\n(專注力、覺察力、創造力、關係、照顧者、復原力、健康、工作、情緒)\n\n3. 帶著覺知，刮出您的正念心靈卡\n\n2026刮刮樂- 正念我的心 -遊戲網址：${url}`;
-            // GA 分享追蹤
+            const url = "https://scwei.github.io/energy-scratch/mindfulness.html";
+            const text = `2026刮刮樂- 正念我的心\n\n1. 正念冥想30秒。\n2. 邀請您優先選擇三個最關心的議題\n(專注力、覺察力、創造力、關係、照顧者、復原力、健康、工作、情緒)\n\n3. 帶著覺知，刮出您的正念心靈卡\n\n2026刮刮樂- 正念我的心 -遊戲網址：${url}`;
             gtag('event', 'share_line');
             window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
         }
