@@ -6,7 +6,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SJRWZ6J7Y5'); // 整合 GA ID
+      gtag('config', 'G-SJRWZ6J7Y5');
     </script>
 
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
 
         header h1 { color: #2c5d4d; font-size: 1.4rem; margin-bottom: 10px; }
         
-        /* 首頁說明文字 */
+        /* 首頁步驟與冥想引導 */
         .instruction-box { 
             background: white; 
             padding: 20px 15px; 
@@ -58,7 +58,7 @@
         }
         .cat-item.selected { transform: scale(1.03); border-width: 3px; }
         
-        /* 各類別選中色彩 */
+        /* 各類別選中色彩設定 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -69,6 +69,7 @@
         .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
         .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
 
+        /* 卡片佈局優化 */
         #scratch-card {
             width: 100%; max-width: 320px; 
             min-height: 420px; 
@@ -77,7 +78,6 @@
             position: relative; overflow: hidden;
         }
         
-        /* 內容容器：維持垂直置中 */
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; 
@@ -90,7 +90,7 @@
         
         .quote-box { margin-bottom: 20px; width: 100%; }
         
-        /* 修正：分類標籤水平置中 */
+        /* 分類標題：置中 */
         .quote-box strong { 
             color: var(--primary-color); 
             display: block; 
@@ -98,9 +98,10 @@
             font-size: 0.85rem; 
             letter-spacing: 1px; 
             text-align: center; 
+            width: 100%;
         }
         
-        /* 修正：金句內容靠左對齊 */
+        /* 金句內容：靠左 */
         .quote-box p { 
             margin: 0; 
             font-size: 1.05rem; 
@@ -112,12 +113,13 @@
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
-        /* 按鈕區域置中 */
+        /* 按鈕容器：置中 */
         #action-area {
             display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            margin-top: 10px;
         }
         .btn { 
             display: inline-flex;
@@ -130,7 +132,7 @@
             color: white; 
             cursor: pointer; 
             font-size: 1rem; 
-            margin: 10px auto; 
+            margin: 8px auto; 
             width: 90%; 
             max-width: 280px;
             box-sizing: border-box;
@@ -205,7 +207,7 @@
             "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念。"],
             "創造力": ["心空了，新的點子才能進來。", "創造力是靈魂在玩耍。", "在留白中，靈感自現。"],
             "關係": ["最好的陪伴，是環境的聆聽。", "先愛自己，才能溫柔地愛別人。", "原諒是為了放過自己。"],
-            "照顧者": ["照顧別人前，請先抱抱疲憊的自己。", "你的好，不需要透過犧牲來證明。", "你已經做得很好了。"],
+            "照顧者": ["照顧別人前，請先抱幫疲憊的自己。", "你的好，不需要透過犧牲來證明。", "你已經做得很好了。"],
             "復原力": ["失敗只是暫時的停頓，不是終點。", "內心的韌性，是在風雨中練就的。", "裂痕是光照進來的地方。"],
             "健康": ["傾聽身體的細語，別等它大聲吶喊。", "長吐一口氣，啟動你的放鬆開關。", "今天的努力到此為止，安心入睡。"],
             "工作": ["忙碌是表象，定心是功夫。", "壓力來臨時，先給自己三個呼吸。", "下班的那一刻，把工作留在門外。"],
@@ -234,7 +236,6 @@
         function goToScratch() {
             document.getElementById('home-page').classList.remove('active');
             document.getElementById('scratch-page').classList.add('active');
-            document.getElementById('action-area').style.display = 'none';
             
             const results = selected.map(c => {
                 const pool = quotesData[c];
@@ -242,6 +243,7 @@
                 return `<div class="quote-box"><strong># ${c}</strong><p>${q}</p></div>`;
             }).join("");
             
+            // 修正：願這份正念陪伴您的 2026 設定為置中
             document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px; width:100%; text-align:center;'>願這份正念陪伴您的 2026</p>";
             
             initCanvas();
@@ -255,7 +257,6 @@
             const ctx = canvas.getContext('2d');
             canvas.width = card.offsetWidth; 
             canvas.height = card.offsetHeight;
-            
             ctx.fillStyle = '#C0C0C0';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#A9A9A9';
