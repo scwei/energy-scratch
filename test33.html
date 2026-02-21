@@ -11,7 +11,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 刮刮樂 - 正念我的心V2</title>
+    <title>2026 刮刮樂 - 正念我的心</title>
     <style>
         :root {
             --primary-color: #5b8e7d;
@@ -22,16 +22,14 @@
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
             margin: 0; 
-            padding: 25px 15px; /* 增加頂部間距，防止文字切到 */
+            padding: 25px 15px; 
             display: flex; flex-direction: column; align-items: center;
             color: #333; line-height: 1.5;
-            -webkit-overflow-scrolling: touch;
         }
 
         .page { display: none; width: 100%; max-width: 450px; text-align: center; }
         .page.active { display: block; }
 
-        /* 調整標題間距 */
         header { margin-bottom: 20px; }
         header h1 { color: #2c5d4d; font-size: 1.5rem; margin: 0; padding: 0 10px; line-height: 1.3; }
         
@@ -61,7 +59,7 @@
         }
         .cat-item.selected { transform: scale(1.03); border-width: 3px; }
         
-        /* 分類色彩定義 */
+        /* 各類別選中色彩 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -75,24 +73,26 @@
         #scratch-card {
             width: 100%; max-width: 320px; 
             min-height: 440px; 
-            background: white; margin: 10px auto 20px auto; /* 增加下方間距 */
+            background: white; margin: 10px auto 20px auto;
             border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             position: relative; overflow: hidden;
         }
         
-        /* 內容容器：改為頂部對齊並增加 Padding 防止切掉 */
+        /* 內容容器：置中佈局 */
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; 
-            justify-content: center; /* 垂直居中，但配合 padding-top 確保首行不貼頂 */
+            justify-content: center; 
             align-items: center; 
-            padding: 40px 30px 30px 30px; /* 增加頂部 Padding */
+            padding: 40px 30px; 
             box-sizing: border-box; 
             overflow-y: auto;
+            touch-action: auto; /* 允許金句區域滾動 */
         }
         
         .quote-box { margin-bottom: 22px; width: 100%; }
         
+        /* 分類標籤置中 */
         .quote-box strong { 
             color: var(--primary-color); 
             display: block; 
@@ -103,6 +103,7 @@
             width: 100%;
         }
         
+        /* 金句內容靠左 */
         .quote-box p { 
             margin: 0; 
             font-size: 1.1rem; 
@@ -112,7 +113,14 @@
             width: 100%;
         }
 
-        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
+        /* 刮刮畫布：刮除時鎖定觸控 */
+        canvas { 
+            position: absolute; 
+            top: 0; left: 0; 
+            cursor: crosshair; 
+            touch-action: none; 
+            border-radius: 20px; 
+        }
 
         #action-area {
             display: none;
@@ -256,6 +264,7 @@
             const canvas = document.getElementById('scratchCanvas');
             const card = document.getElementById('scratch-card');
             const ctx = canvas.getContext('2d');
+            canvas.style.display = 'block'; // 確保重新開始時畫布顯示
             canvas.width = card.offsetWidth; 
             canvas.height = card.offsetHeight;
             ctx.fillStyle = '#C0C0C0';
@@ -289,7 +298,7 @@
             let transparent = 0;
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) transparent++; }
             if ((transparent / (canvas.width * canvas.height)) * 100 > 50) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.style.display = 'none'; // 💡 重要修正：刮完後隱藏畫布，釋放捲動限制
                 document.getElementById('action-area').style.display = 'flex';
                 gtag('event', 'scratch_complete');
             }
