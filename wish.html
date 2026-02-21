@@ -11,319 +11,335 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 刮刮樂 - 正念我的心</title>
+    <title>🧧 2026 正念慈心能量指引 🧧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #5b8e7d;
-            --bg-color: #f4f7f6;
-            --silver: #C0C0C0;
+            --festive-red: #c62828;
+            --gold: #d4af37;
+            --light-gold: #f9f1c0;
+            --healing-purple: #6a1b9a;
+            --line-green: #00b900;
+            --bg-gradient: linear-gradient(135deg, #7b1fa2 0%, #c62828 100%);
         }
+
         body {
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0; 
-            padding: 25px 15px; 
-            display: flex; flex-direction: column; align-items: center;
-            color: #333; line-height: 1.5;
-        }
-
-        .page { display: none; width: 100%; max-width: 450px; text-align: center; }
-        .page.active { display: block; }
-
-        header { margin-bottom: 20px; }
-        header h1 { color: #2c5d4d; font-size: 1.5rem; margin: 0; padding: 0 10px; line-height: 1.3; }
-        
-        .instruction-box { 
-            background: white; 
-            padding: 20px 15px; 
-            border-radius: 15px; 
-            margin-bottom: 25px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-            text-align: left;
-        }
-        .instruction-box ol { padding-left: 20px; margin: 0; }
-        .instruction-box li { margin-bottom: 12px; font-weight: bold; font-size: 0.95rem; }
-        .meditation-quote { 
-            display: block; 
-            font-weight: normal; 
-            color: var(--primary-color); 
-            font-style: italic; 
-            margin-top: 5px; 
-            font-size: 0.85rem;
-        }
-
-        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
-        .cat-item {
-            padding: 12px 2px; background: white; border-radius: 10px; border: 2px solid #ddd;
-            cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem;
-        }
-        .cat-item.selected { transform: scale(1.03); border-width: 3px; }
-        
-        /* 各類別選中色彩 */
-        .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
-        .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
-        .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
-        .cat-item[data-cat="關係"].selected { border-color: #ffb6b9; color: #ffb6b9; background: #fff0f0; }
-        .cat-item[data-cat="照顧者"].selected { border-color: #00a8cc; color: #00a8cc; background: #f0faff; }
-        .cat-item[data-cat="復原力"].selected { border-color: #a39193; color: #a39193; background: #f4f1f1; }
-        .cat-item[data-cat="健康"].selected { border-color: #81b214; color: #81b214; background: #f5f9ed; }
-        .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
-        .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
-
-        #scratch-card {
-            width: 100%; max-width: 320px; 
-            min-height: 440px; 
-            background: white; margin: 10px auto 20px auto;
-            border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            position: relative; overflow: hidden;
-        }
-        
-        /* 內容容器：置中佈局 */
-        .result-content {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 40px 30px; 
-            box-sizing: border-box; 
-            overflow-y: auto;
-            touch-action: auto; /* 允許金句區域滾動 */
-        }
-        
-        .quote-box { margin-bottom: 22px; width: 100%; }
-        
-        /* 分類標籤置中 */
-        .quote-box strong { 
-            color: var(--primary-color); 
-            display: block; 
-            margin-bottom: 6px; 
-            font-size: 0.9rem; 
-            letter-spacing: 1px; 
-            text-align: center; 
-            width: 100%;
-        }
-        
-        /* 金句內容靠左 */
-        .quote-box p { 
-            margin: 0; 
-            font-size: 1.1rem; 
-            line-height: 1.6; 
-            color: #333; 
-            text-align: left; 
-            width: 100%;
-        }
-
-        /* 刮刮畫布：刮除時鎖定觸控 */
-        canvas { 
-            position: absolute; 
-            top: 0; left: 0; 
-            cursor: crosshair; 
-            touch-action: none; 
-            border-radius: 20px; 
-        }
-
-        #action-area {
-            display: none;
+            font-family: "Noto Serif TC", serif;
+            background: var(--bg-gradient);
+            display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            margin-top: 5px;
-        }
-        .btn { 
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 14px 25px; 
-            border-radius: 35px; 
-            border: none; 
-            background: var(--primary-color); 
-            color: white; 
-            cursor: pointer; 
-            font-size: 1.1rem; 
-            margin: 8px auto; 
-            width: 90%; 
-            max-width: 280px;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
             box-sizing: border-box;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(91, 142, 125, 0.2);
         }
-        .line-btn { background: #06C755 !important; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.2) !important; }
+
+        .main-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+            border: 4px solid var(--gold);
+            margin-bottom: 30px;
+        }
+
+        h1 { 
+            font-family: 'Ma Shan Zheng', cursive; 
+            color: var(--festive-red); 
+            font-size: 2.2rem; 
+            margin: 10px 0;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+        }
+
+        .subtitle { 
+            font-size: 1.1rem; 
+            color: #444; 
+            margin-bottom: 25px; 
+            font-weight: 700; 
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cat-btn {
+            background: white; border: 2px solid var(--festive-red); padding: 15px 5px;
+            border-radius: 12px; cursor: pointer; font-size: 1.05rem; font-weight: 900;
+            color: var(--festive-red); transition: all 0.2s;
+            box-shadow: 0 3px 0 var(--festive-red);
+        }
+        .cat-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--festive-red); }
+
+        .scratch-card-wrapper {
+            position: relative; width: 280px; height: 160px;
+            margin: 0 auto 15px; border-radius: 15px;
+            overflow: hidden; border: 3px solid var(--gold);
+            background: #fff; display: none;
+        }
+        .prize-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; line-height: 1.5; color: var(--healing-purple);
+            padding: 20px; box-sizing: border-box; text-align: center; font-weight: 900;
+        }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 10; cursor: crosshair; touch-action: none; }
         
-        .footer-links { margin-top: 35px; border-top: 1px solid #ddd; padding: 25px 10px; font-size: 0.85rem; width: 100%; max-width: 450px; text-align: left; }
-        .footer-links h4 { margin-bottom: 8px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 8px; margin-top: 15px; }
-        .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 10px 0; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
+        #status { margin-top: 10px; font-weight: 700; color: var(--festive-red); min-height: 1.5em; font-size: 1.1rem; }
+        
+        /* 底部按鈕區 */
+        .action-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .retry-link {
+            color: var(--healing-purple);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .line-share-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--line-green);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(0,185,0,0.2);
+            transition: 0.3s;
+        }
+        .line-share-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,185,0,0.3); }
+        .line-share-btn img { width: 18px; height: 18px; filter: brightness(0) invert(1); }
+
+        .bottom-links {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 40px;
+        }
+        .link-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+        .card-title { color: var(--light-gold); font-size: 0.9rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
+        .link-grid { display: flex; flex-direction: column; gap: 8px; }
+        .bottom-links a {
+            background: white; color: var(--healing-purple); text-decoration: none;
+            padding: 10px; border-radius: 10px; font-size: 0.9rem; font-weight: 700;
+            transition: 0.3s; border: 1px solid var(--gold);
+        }
+        .bottom-links a:hover { background: var(--light-gold); transform: translateY(-2px); }
+        .event-link { border-left: 5px solid var(--gold) !important; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="home-page" class="page active">
-        <header><h1>2026 刮刮樂 - 正念我的心</h1></header>
-        
-        <div class="instruction-box">
-            <ol>
-                <li>正念冥想 30 秒 (請閉上眼感受呼吸)
-                    <span class="meditation-quote">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</span>
-                </li>
-                <li>選擇三個最關心的議題</li>
-                <li>帶著覺知，刮出您的正念心靈卡</li>
-            </ol>
-        </div>
-
-        <div class="category-grid" id="catGrid">
-            <div class="cat-item" data-cat="專注力">專注力</div>
-            <div class="cat-item" data-cat="覺察力">覺察力</div>
-            <div class="cat-item" data-cat="創造力">創造力</div>
-            <div class="cat-item" data-cat="關係">關係</div>
-            <div class="cat-item" data-cat="照顧者">照顧者</div>
-            <div class="cat-item" data-cat="復原力">復原力</div>
-            <div class="cat-item" data-cat="健康">健康</div>
-            <div class="cat-item" data-cat="工作">工作</div>
-            <div class="cat-item" data-cat="情緒">情緒</div>
-        </div>
-        <p id="counter" style="margin-top:15px; font-size:0.85rem; color:#888;">請選擇 3 個議題 (已選: 0/3)</p>
+<div class="main-container">
+    <div style="font-size: 2rem;">🧧 ✨ 🧘</div>
+    <h1>2026 正念慈心能量指引</h1>
+    <div id="top-msg" class="subtitle">
+        1. 請在內心默念您的問題<br>
+        2. 選擇您最關心的議題<br>
+        3. 領取宇宙給您的啟示
     </div>
 
-    <div id="scratch-page" class="page">
-        <header><h1>帶著覺知，刮出您的正念心靈卡</h1></header>
-        <div id="scratch-card">
-            <div class="result-content" id="resultContainer"></div>
-            <canvas id="scratchCanvas"></canvas>
-        </div>
-        
-        <div id="action-area">
-            <a href="#" class="btn line-btn" id="lineBtn" onclick="shareLine()">🍀 LINE 分享祝福</a>
-            <button class="btn" style="background:#888" onclick="location.reload()">重新選擇議題</button>
-        </div>
+    <div id="category-screen" class="category-grid">
+        <button class="cat-btn" onclick="selectCategory('健康')">🍏 健康</button>
+        <button class="cat-btn" onclick="selectCategory('關係')">❤️ 關係</button>
+        <button class="cat-btn" onclick="selectCategory('心靈')">🧘 心靈</button>
+        <button class="cat-btn" onclick="selectCategory('事業')">🚀 事業</button>
+        <button class="cat-btn" onclick="selectCategory('財富')">💰 財富</button>
+        <button class="cat-btn" onclick="selectCategory('靈魂功課')">💎 靈魂功課</button>
+        <button class="cat-btn" style="grid-column: span 2;" onclick="selectCategory('重要決策')">⚖️ 重要決策要不要</button>
     </div>
 
-    <div class="footer-links">
-        <h4>其他刮刮樂</h4>
-        <a href="https://scwei.github.io/energy-scratch/wish.html">2026 正念慈心能量指引</a>
-        <h4>近期活動 ✨</h4>
-        <a href="https://himind.pse.is/balance2026" target="_blank">免費報名：自律神經平衡課說明會</a>
-        <a href="https://himind.pse.is/8lax8f" target="_blank">免費報名：神奇能量鎚互動教學</a>
-        <h4>學習資源 📖</h4>
-        <a href="https://www.facebook.com/mindfulness.tw" target="_blank">更多正念學習 (Facebook)</a>
-        <a href="https://www.facebook.com/HiMindHealing" target="_blank">更多能量學習 (Facebook)</a>
+    <div id="scratch-screen" class="scratch-card-wrapper">
+        <div id="prize-text" class="prize-layer"></div>
+        <canvas id="scratch-canvas" width="280" height="160"></canvas>
     </div>
 
-    <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzLYgoIPlt_XHe8yZ8iVuc392FDcSXQDnzszBZxNjNZA5r7j1k2mZ0kVdS_GnGNX-2m/exec";
+    <div id="status"></div>
+    <div id="retry-container" class="action-group hidden">
+        <span class="retry-link" onclick="resetGame()">想再刮一次嗎？</span>
+        <a id="line-share-btn" href="#" target="_blank" class="line-share-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="Line"> 分享好友
+        </a>
+    </div>
+</div>
+
+<div class="bottom-links">
+    <div class="link-card">
+        <div class="card-title">近期活動 ✨</div>
+        <div class="link-grid">
+            <a href="https://himind.pse.is/balance2026" target="_blank" class="event-link">免費報名：自律神經平衡課說明會</a>
+            <a href="https://himind.pse.is/8lax8f" target="_blank" class="event-link">免費報名：神奇能量鎚互動教學</a>
+        </div>
+    </div>
+    <div class="link-card">
+        <div class="card-title">學習資源 📖</div>
+        <div class="link-grid" style="flex-direction: row; gap: 10px;">
+            <a href="https://www.facebook.com/mindfulness.tw" target="_blank" style="flex: 1;">更多正念學習</a>
+            <a href="https://www.facebook.com/HiMindHealing" target="_blank" style="flex: 1;">更多能量學習</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONTENT_DATA = {
+        "健康": [
+            "身體是能量最誠實的顯示器，從不說謊。", "不舒服並非是要擊垮身心的敵人，而是提醒慢下來的善意老師。", "自律神經平衡的關鍵在於專注、放鬆、感到安全，而非意志力控制。", "越想用力「修好」身體，神經系統往往繃得越緊。", "身體療癒的核心關鍵字是：專注與放鬆。", "疼痛是在呼喚關心，那是喚醒而非懲罰。", "細胞會聽從心智指令，對內在的話語就是細胞的程式碼。", "挺胸迎向陽光，用充滿力量的姿勢翻轉內在能量。", "允許暫時的低潮，休息是為了讓能量重新流動。", "端粒長度不全由基因決定，情緒與想法能改寫生命品質。", "溫柔地對待身心，就是啟動副交感神經的開關。", "睡眠不是追來的，而是放鬆後被睡意找上門。", "腦袋轉不停時，透過正念行走將頭部的氣沉至腳底。", "斷捨離不只是清理空間，更是鬆動內在卡住的能量點。", "慢性發炎的源頭，往往藏在長期壓力與卡住的情緒裡。", "把手放在心口，讓內在知道：現在是安全的。", "免疫系統的強大，來自對世界保有的愛與好奇心。", "呼吸是最好的良藥，跟著引導深呼吸三次。", "伸展脊椎，讓堵塞的生命能量流動得更為順暢。", "肝膽與怒氣及固執相關，試試更高維度的角度看待卡住的事，心鬆身體就流動健康。", "胃部承受著焦慮，專注品嚐一頓飯就是最好的營養處方。", "心臟是全身能量的首領，平靜喜悅的心是最高級的養生。", "釋放身體卡住的情緒，就像是在清理系統裡的錯誤程式。", "肌肉的反應是潛意識最真實的對白，值得細心聆聽。", "每一口呼吸都是能量重新連結，觀察此刻呼吸的深淺與節律。", "若源頭困擾未解除，徵狀的消失僅是暫時的停火協議。", "對感覺與情緒不評價好壞對錯，啟動身體自癒力。", "真正的復原力，是在跌倒時依然能找到內在的導引星。", "健康不只是沒有病，而是精、氣、神全然的飽滿與流動。", "當不再對抗疼痛，疼痛就不再具備傷害身心的力量。", "注意力從頭腦轉移到感官，是神經系統下班的訊號。", "身體的緊繃，往往是靈魂在抗拒當下的發生。", "好的睡眠，是靈魂在夜間進行的神聖能量補給。", "放下肩膀鬆開下巴，讓副交感神經啟動全身修復。", "粒線體的活力，取決於給予生命多少喜悅的燃料。", "如果感到委屈，讓陽光照進心靈，感受宇宙的支持。", "眼睛酸澀提醒著過度向外追求，回到內心的家看看。", "背部疼痛往往反映了扛負過多的家族包袱與重擔。", "喉嚨的異物感，源自那些想說卻被壓下的真實聲音。", "腳底接地氣，讓大地的慈悲淨化全身的濁氣能量。", "身體的每一個洞察與覺知，都是邁向自由的階梯。", "放鬆不是什麼都不做，而是有覺察地放下控制。", "過敏反應是身體在嘗試界定安全邊界，需要溫柔理解。", "面對無常的變化，呼吸是生命唯一的穩定器。", "真正的修復，是從誠實承認「累了」開始。", "神經系統需要一個暫停鍵，那就是當下的覺察。", "別讓緊繃成為習慣動作，在此刻溫柔地放鬆雙肩。", "氣血的流動，是生命對創造價值的渴望與展現。", "每一條筋膜都刻印著一段被遺忘的情緒故事。", "正念飲食是與食物能量的一場神聖深度約會。", "所有治療皆為外援，真正的療癒發生在生命內在。", "不要逼迫快速好轉，學會陪著身體慢慢走過低谷。", "能量的提升，從每天對著鏡中的生命微笑開始。", "憤怒會燒損功德，也會損害脆弱的血管壁。", "恐懼讓能量場縮小，慈悲則讓整體的能量場擴張。", "身體不適時輕聲詢問：想透過這個感覺告訴什麼？", "每一顆細胞都在努力愛著生命，請也溫柔地愛護它們。", "健康並非遠大目標，而是從當下的每一次呼吸開始。", "健康是多種因緣整合的結果，而非單一行為的產物。", "盤點每日思維，看清哪些是滋養，哪些是能量內耗。", "追求健康不應成為新的壓力，避免帶來更多緊繃。", "放下過度的用力，放鬆才是能量平衡的最佳狀態。", "睡前透過感恩與釋放，清空未消化完的身心包袱。", "觀察欲望的邊界，覺知它帶來的是平衡還是混亂。", "身外物難以掌控，但觀察念頭是唯一的主權。", "內在狀態與家族連動，答案往往藏在與父母的關係中。", "面對紛雜觀點，用身體實證最契合頻率的選擇。", "區分行動源於「愛自己」，還是源於「焦慮與恐懼」。", "信任是提升免疫的關鍵，讓細胞感受無條件的支持。", "選擇合適的知識配合愛的行動，即是對生命最好的滋養。", "熱愛身體的每一條神經與骨骼，感知愛與慈悲的滋養。", "吸氣時感知全身，吐氣時展現溫柔微笑，安撫細胞。", "療癒需要空間與時間，耐心是此刻最棒的心理藥方。", "身體器官都在各司其職，對這份運作充滿感激。", "在這一次深長的呼吸中，再次與生命的母體產生連結。", "透過規律呼吸，平靜與氧氣正緩緩流動到全身角落。", "放下白天的社交角色，在沉睡中充分補充生命能量。", "觀想溫暖陽光從頭灑進脊椎，驅散體內所有沉重與寒氣。", "透過感官領略世界的美麗，生命本是如此富饒且豐盛。", "允許情緒自由流動，就像河水帶走累積的心理雜質。", "在皮膚之內建立安全的避風港，任何外在紛擾無法侵入。", "鬆開緊咬的牙關與僵硬表情，讓全身進入柔軟的律動。", "血液中流淌著喜悅與生命力，滋養著身體每一個終端。", "毛孔在呼吸中全然張開，吸入清淨，排出積壓的疲憊。", "像一棵大樹向上伸展領受光芒，向下紮根連結厚實土地。", "此刻身心是健康完整的，正被全宇宙的能量深深祝福。"
+        ],
+        "關係": [
+            "關係的修復不在於完美，而在於情緒升起時願意先停下來。", "劃清界線不是拒絕愛，而是為了讓愛有呼吸的空間。", "真正傷人的往往不是誤會，而是想解釋卻沒被聽見的痛。", "把不屬於自己的情緒功課歸還給對方，這是一份深沉的慈悲。", "對父母的全然認可，是生命能量向前流動的根源。", "親密關係中的語氣，往往比說話的內容更為重要。", "價值不取決於他人的選擇，也不住在外在的評價裡。", "擁抱比講道理更能讓緊繃的神經系統恢復安定。", "有界線的善良，才不會讓內在能量持續地外漏。", "真正成熟的愛是互相，而非單方面的燃燒與犧牲。", "每個帶來痛苦的人，都是喚醒內在未解之傷的貴人。", "孩子鬧脾氣時，需要的不是大道理，而是一個安全的擁抱。", "說出真實需求是邀請，而情緒化的指責則是推開。", "關係中的內耗，通常源於想要改變對方的執念。", "感謝一段關係曾經存在，就是對彼此生命最好的告別。", "困惑時回溯最初的起點，答案往往藏在起心動念裡。", "良好的關係並非單向索取，而是共同為整體滿足付出。", "在關係中練習傾聽，並勇敢且清晰地表達內在需求。", "幸福不是憑空降臨的運氣，而是當下創造出來的行動。", "孝順不是犧牲，而是讓愛順利流動而不卡住。", "覺察回應方式，是否正無意識受到過往受傷經驗牽動。", "分清當下事件與過往創傷，是關係回歸清明的關鍵。", "衝突在關係中是正常的，關鍵在於是否溫柔尋求支持。", "看見對方的本質、尊重其需求，連結感便會自然升起。", "身邊的伴侶，有時只是陪著演完那場未竟的家族戲。", "關係內耗最為消磨生命，尋求專業協助是愛自己的表現。", "若努力後仍無法轉化，勇敢斷捨離或許是幸福的起點。", "變革中藏著靈性禮物，讓人看清情緒與行為慣性。", "在混亂中靜心觀察，每次起伏都是靈魂成長的契機。", "對方永遠不會道歉時，可以選擇自己放過沉重的心。", "愛是如冬日陽光般的包容，是不必擔心被評判的港灣。", "愛是自發性的關懷與尊重，是不計回報的給予。", "內在價值衡量標準，建立在被看見與願付出的自發性上。", "選擇用充滿愛的頻率行動，讓關係轉化為深層滋養。", "寬恕的真正意義，是讓自己的靈魂回到自由。", "關係是一面鏡子，映照出內在尚未修補的地方。", "先成為理想中想吸引的人，能量頻率決定了生命相遇。", "真正的親密，來自敢在信任的人面前展現真實的脆弱。", "接納生命的侷限，每個人都在用已知最好方式生活。", "停止期待別人來完整生命，內在本身即是具足。", "有關係的離開，是宇宙在移開不再適合的能量連結。", "練習正念傾聽，聽見語氣背後那份想被理解的渴望。", "給予而不求回報，愛才會形成一個豐盛、完美的循環。", "孤獨是與靈魂對話的機會，練習在安靜之中安住。", "爭吵時靜心省思：此刻要的是贏得勝利，還是愛？", "當孩子鬧脾氣時，先蹲下來，溫柔地抱抱內在的小孩。", "每天對重要的人說聲謝謝，為愛的帳戶累積情感存款。", "社交圈決定了震動頻率，練習優化周遭的能量環境。", "體貼的人常忘了自己，練習對不合理的要求溫柔說不。", "愛是動詞，透過正念的陪伴，讓這份在場充滿重量。", "拒絕情緒勒索，也不勒索他人，讓愛回歸自由流動。", "擁抱時感受心跳同步的頻率，這是靈魂間最深的對話。", "誠實是最高級的性感，真誠的表達能縮短心的距離。", "謝謝某段關係真實存在過，頻率不同了就溫柔地道別。", "愛不是佔有，學會欣賞生命最自然盛開的樣子。", "這份生命值得擁有愛。大膽地去愛，也溫柔地被愛。", "就在這裡安靜陪著，這是能給予他人最珍貴的禮物。", "願世界平安快樂，願在這份關係中感受到真正的自由。", "傷害他人即是傷害自身，愛人就是愛這完整的世界。", "不急著糾正或反駁，只是安靜聽見靈魂深處的微弱聲音。", "界線讓愛更持久，清晰的邊界是守護自己能量的表現。", "看見那心中曾受過傷的小孩，願意用慈悲將他接住。", "放下對他人的預設與劇本，嘗試欣賞對方當下的樣子。", "每天練習看見他人的一處優點，複利會讓幸福感翻倍。", "當學會珍惜自己時，自然會吸引懂得珍惜與看重的人。", "承認長輩已在侷限中給了全部，不再強求完美的期待。", "在彼此的在場中，一起演化成更美好、更完整的人。", "言語充滿善意與慈和，不再讓話語成為刺傷人的利刃。", "像是兩個圓互相交疊，也可以獨立、快樂地持續旋轉。", "愛能跨越生死時空，在每一次深深的想念之中圓滿。", "當感覺疏離時，先回到深呼吸，從穩定與安定中出發。", "歡喜他人的成就，同理對方正在經歷的每一次苦戰。", "假如頻率不再對齊，溫柔祝福對方往光亮的方向走去。", "在照顧家人的辛勞中，預留時間照顧這個辛苦的自己。", "信任就像慢生長的樹，需要誠實與耐心去細細灌溉。", "宇宙的慈心能量正支援著，引領如何更好地學習愛。", "溫柔看進對方的眼裡，看見那份不加修飾的純粹存在。", "對伴侶與親人充滿信心，選擇用鼓勵來代替負面批判。", "真正的溝通，是跨越大道理，從心出發到達心的過程。", "生命正處於愛之中，存在的本質即是全然的、純粹的愛。"
+        ],
+        "心靈": [
+            "念頭並非實相，只是觀察想法起伏的清明意識。", "活在當下，是安頓靈魂、連結能量的唯一時刻。", "全然接納此刻的發生，內心的掙扎與痛苦就會減半。", "心中若有風景，即便身處鬧市，心也是一座世外桃源。", "每天花五分鐘練習 Being 模式，單純地存在於此。", "焦慮是為未發生的劇情，預付了高昂的情緒稅金。", "心是天空，情緒是雲，不需要驅趕，也不需要抓住。", "所有的生命答案，都會在安靜的覺察之中自然浮現。", "專注力像是肌肉，需要被溫柔、持續地訓練。", "放下對完美的病態執著，承認不完美也是一種真實的美。", "感恩產生療癒頻率，讓心從匱乏感轉向豐盛能量。", "信任宇宙的節奏，即便看不清全貌，一切都在路上。", "恐懼的對面不是勇敢，這是對生命、對此刻全然的信任。", "內在小孩一直在等待著，去聽聽他、抱抱他，接納他。", "覺得不夠好時只是舊標籤，不代表此時真實的存在。", "靈魂不需要成功證明，這趟旅程只需要深刻的經歷。", "保持初心，像孩子一樣對世界的微小驚喜保持好奇。", "平常心就是道，在平凡的生活中看見生命的神聖感。", "每一朵花在自己節奏中綻放，步調也可以如此自在。", "把心打開，不要帶著既定計畫，奇蹟才有位置進來。", "斷捨離不只是清物品，更是鬆動內在卡住的陳舊信念。", "憤怒升起時嘗試識別並命名它，用慈悲心安撫受驚的心。", "願身心平安健康，這份慈心祝福會改變整體的氣場。", "逆境是包裹醜陋的禮物，耐心地拆開，裡面藏著智慧。", "所有的發生都具備積極意義，即便當下感覺是個挫折。", "心安理得是這個時代，最高級且最為珍貴的奢侈品。", "不隨環境起舞，心就是穩固的舵，帶領平安度過風暴。", "溫柔對待負面情緒，靜靜詢問這份鬱卒想告訴什麼。", "智慧在沈默中生根，在帶著覺察的行動中開花。", "當感覺被攻擊，其實是內在舊傷準備好被看見療癒了。", "活出真實與光亮，就是對世界能量場最好的貢獻。", "簡單是複雜之後的終極境界，讓生活回歸純粹的中心。", "練習「不評價」，在覺察當下給予自己溫和、寬容的空間。", "念頭只是種子，選擇種下正向的意圖，但不執著結果。", "當心很亂時把注意力帶回腳底，讓每一步都穩穩落地。", "回家吧，回到內在那個永恆平靜、本自具足的中心。",
+            "在精神的世界裡，一切都是美好的，正被全宇宙守護。", "不論走到人生的哪一個階段，此時此刻就在那裡。", "步步生蓮；每一步都踏在心地的淨土上，每一步都是回家。", "念頭來了看見它，念頭走了不留它，只是靜靜地觀看。", "放下所有先入為主的偏見，用新生的眼光看待萬事物。", "練習無為，不強求特定的目標，讓能量自然流動。", "相信宇宙的安排自有美意，即便是暫時隱藏的祝福。", "鬆開緊抓不放的手，會驚訝地發現原來天空竟如此開闊。", "外在風暴再劇烈，內心深處始終保有一片寧靜的深海。", "成功不使人迷失，挫敗不使人受傷，在意當下的覺受。", "停下自動導航模式，看清起心動念，這即是真正的自由。", "情緒如同天上的雲朵，心靈則是背後恆久長存的藍天。", "犯錯時選擇溫柔擁抱自己，而非用批判鞭打靈魂。", "看穿了幻象，所有的煩惱都源於對事情的主觀詮釋。", "注意力專注於想要的豐盛，而非對匱乏的恐懼逃避。", "平靜不是屏除雜音，而是嘈雜之中，心靈依然安坐。", "丟掉舊有的限制信念，為嶄新的靈魂光芒騰出空間。", "不必為明天憂慮，明天的身心也同樣會被愛眷顧。", "發現不夠好只是妄念，生命的本質一直是光明的。", "掃地也在掃除心地的塵埃，整理環境也在整理潛意識。", "全神貫注於手邊微小之事，就是最深沉的禪修享受。", "接納靈魂中的每一道裂痕，那是光得以進入內在的地方。", "在心中播下喜悅與寬容的種子，並耐心地等待開花。", "拿回生命的自主權，不讓他人的情緒左右內在頻率。", "哪怕只是陌生人的微笑，都深深感恩以此提升頻率。", "恐懼處理器只是靈魂的一個門檻，跨過去，背後就是無盡自由。", "每日給予十分鐘的靜默與獨處，是與宇宙能量的對接。", "世界雖然紛亂，手中之舵必須穩固，由心決定方向。", "願所修得的平靜，能迴向給世間受苦的人。", "允許自己暫時的崩塌，才學會如何從泥淖之中重生。", "面對難關時沉穩自問：這件事正在教導什麼樣的智慧？", "不向外尋求解答，聽從內在寂靜的高頻指引。", "那些原本不屬於自身的重擔，此刻通通溫柔歸還世界。", "作為星辰與宇宙的一部分，星系運行，身心也同樣和諧。", "標記上勇氣、慈悲與智慧，並以此身分過生活。", "休息吧，心靈的歸宿就在這一呼一吸之間，不需外求。"
+        ],
+        "財富": [
+            "金錢是一股能量的交換，背後有著平衡的運作機制。", "生命能量是財富的基礎，包含精神、體力與情緒狀態。", "轉變與金錢能量的關係，是邁向美好未來的第一步。", "財富不只是存款，更是與世界連結的深度。", "重建對金錢的看法，財務豐盛的可能性就會開啟。", "感恩收到的每一分錢，也感恩有能力支付每一筆費用。", "支付帳單不是失去，而是因為值得擁有這些價值。", "以生命能量為基礎，能喜悅地創造財富。", "金錢福德指數是內在潛力與社會貢獻的加總，觀察平日利益大眾之事。", "賺錢不必然要艱辛，它可以是愉快且豐盛的過程。", "別用宿命論鎖住財富，財富是可以透過行動改變的。", "投資不是賭博，不學習金錢知識才是最大的風險。", "停止評價他人的賺錢方式，專注於自身的能量豐盛。", "管理能力是可以後天培養的，不善理財只是一個幻覺。", "財富不會帶來不安，匱乏的恐懼才會。", "不要等到完美才面對市場，在行動中修正才能掌握商機。", "飽和的不是市場，而是受限的想像力。", "低價促銷不是唯一出路，提升價值才是獲利關鍵。", "感謝家人的付出，但不必為他人的財務命運承擔責任。", "尊重家人的恐懼包袱，但可以選擇走出自己的路。", "釋放原生家庭對財富的限制，創造屬於自己的未來。", "歸還不屬於自身的匱乏能量，擁抱本該屬於生命的自由。", "守成不代表安全，過度的保守有時是最大的冒險。", "可以愛家人，同時也擁有豐盛的財富。", "突破家族信念的包袱，才能看見真正的財富藍圖。", "創造客戶價值，是獲得豐盛報酬最穩固的基石。", "找出社會需求與己身能量的交點，那就是熱情所在。", "專業知識與技能的累積，是財富增長的必然路徑。", "持續創新是保持競爭力的核心關鍵。", "合作能帶來更大的成功，分享利潤是共好的智慧。", "賺錢不僅是為了自己，更是為了有能力幫助更多人。", "每一次財務挫折都是升級新技能的學習機會。", "豐盛是透過持續做正向循環的事情累積而來的。", "提升自我覺知，能幫忙洞察別人看不見的商機。", "財富增長需要耐心，正如種子成長需要時間。", "覺察花錢時的情緒，那是對財富最真實的信念。", "憤怒與怨恨的能量，是財富路上的最大障礙。", "透過靜心冥想，能提升財富背後的洞察力與創造力。", "面對指責與控制時，請建立清楚的能量界線。", "修正言語反應，因為語言會形塑財務現實。", "修復自我價值感，是獲取豐盛財富的前提。", "覺察內在恐懼，別讓恐懼干涉財務決策。", "當內在能量不再內耗，財富自然會蓄積。", "消融過去的限制性銘印，解鎖財富潛能。", "所有財務目標，都應貼著內在最真實的感受去修正。", "平衡生活與事業，才是真正的財務成功。", "累積福德能量，能為行動創造更有利的機遇。", "播種善因與利他，會吸引同頻率的正能量財富。", "突破自我的框架，相信自身有成就非凡的潛力。", "獨立思考，別被社會期待與他人眼光束縛了財路。", "探索多元專業，挑戰自我是擴展財富視野的最佳方式。", "真正的解脫是翻轉受害者模式，主導金錢命運。", "感恩練習與分享資源，是增長福德最簡單的路徑。", "面對挑戰時不斷蛻變，會發現困難後藏著寶藏。", "找到靈魂的神識道路，讓財富自然跟隨腳步。", "內在世界創造了外在世界。", "金錢不是邪惡的，它只是顯化內在能量的工具。", "停止抱怨與指責，因為關注什麼就會擴大什麼。", "錢會流向那些愛它、尊重它並懂得運用它的人。", "別讓安於現狀的限制信念阻礙轉變。", "財富不應是以犧牲身體健康為代價的。", "值得擁有豐盛，只要願意修復內在的關卡。", "改變心靈障礙，才能突破限制性的財務框架。", "專注於機會而非障礙。", "財富是專注力的副產物，專注能蓄積能量，覺察慣性的消耗。", "財富是給予的祝福，是為了讓生命行善。", "布施（Giving）是創造財富潛力的重要指標。", "命由我作，福自己求；命運是可以透過善行改變的。", "謙德可使人受益，亞致傲慢則會讓能量乾涸。", "誠實是經商的最高準則。", "認清家族信念的包袱，不要盲目忠誠於受苦的劇本。", "能量清理與大自然活動能提升洞察力與創造力源頭。", "淨值等於社交圈的價值。", "避免銅板經濟的窮忙，追求高價值的能量交換。", "建立清楚的能量界線：功課由自身負責，他人的情緒歸還對方。", "以社會需求出發，結合自身熱情項目，創造財富。", "金錢是一面鏡子，照出對世界的信任程度。", "賺錢不該是為了安全感，而是為了豐盛感。", "管理財務不是限制自由，而是為了創造更大的自由。", "財富的規模取決於解決問題的能力。", "財富豐盛的人，通常具備極強的挫折復原力。", "不要為了討好所有人而降低自身價值。", "投資於能提升洞察力的事情，這比黃金更值錢。", "讓才華產品化，讓財富自動流動。", "成功的人在小事上也很認真。", "財富是時間的積累，不要急於求成。", "接受幫助也是一種能量的平衡。", "消融阻礙財富進來的怨恨能量，寬恕傷害過自身的人。", "擁有財務尊嚴，不為五斗米折腰，相信自身的創造力。", "將金錢視為流動的河水，而非靜止的池塘。", "每一分努力都會在福德簿上留下印記。", "建立多個財富渠道，分散風險。", "保持好奇心，它是發現財富機會的指南針。", "經濟獨立是為了能更自由地選擇想過的生活方式。", "所有的財富都起始於一個大膽的想像。", "持續學習，直到世界變大，大到可以裝下所有夢想。"
+        ],
+        "事業": ["事業不是生存苦役，而是生命能量延伸。","專注力是最珍貴資產，別浪費在無效干擾。","每一份任務，都是一場動態的正念冥想。","感到疲憊是因為你在「對抗」而非「流動」。","最好工作狀態：身體放鬆、大腦專注、心靈慈悲。","卓越源於內心寧靜，而非外界嘈雜。","事業高度取決於內在能量穩定度。","帶著覺察工作，最微小的細節都能閃耀。","專注於「給予」而非「獲取」，豐盛自來。","療癒金錢恐懼，事業能量才會流動。","拒絕多工處理，一次只溫柔做好一件事。","競爭是幻象，貢獻才是靈魂真相。","成功是活出真正自己，不是贏過別人。","喧囂會議中，記得回到自己的呼吸。","專業是軀殼，慈悲心才是事業靈魂.","收入是宇宙對你付出能量的感謝狀。","保持「初心」，那是能量不乾涸源頭。","深度專注一小時，勝過焦慮工作一天。","事業不僅是賺錢，更是人間修行的道場。","減少不必要言語，讓行動更有能量。","生活工作整合，來自對當下的接納。","帶著療癒意圖服務，事業將無堅不摧。","判斷力來自清明神智，而非混亂忙碌。","解決問題最高境界，是從源頭消融衝突。","能量在哪裡，你的成就就在哪裡。","合作對象是來映照內在狀態的導師。","壓力中放鬆肩膀，是給身體的慈心祝福。","真正領導力，是啟發他人內在能量。","創業關於「創造」，而非關於「佔有」。","不再證明自己，真正力量才會顯現。","創意在留白空間由靈魂親自寫下。","拒絕耗能邀約，守護事業純粹。","把專長轉化為愛，就是最成功事業。","信任生命節奏，有時前進，有時留白。","你的存在本身，就是事業核心價值。","今天，請帶喜悅與正念去創造世界。"],
+        "靈魂功課": [
+            "修復自我價值並非奢侈品，而是解決一切內在障礙的基礎。", "對著鏡中生命給予認同，即是在平衡負載過高的杏仁核指數。", "身體是心靈的鏡子；所有的疼痛，都在提醒仍有未消融的情緒能量團。", "所謂的「不夠好」，只是上一代植入的過時程式，現在即可選擇解鎖。", "學習認同內在的生命，即是修復能量的良藥。", "每一口深呼吸與微笑，都在為大腦注入喜悅能量。", "過去的經驗可以成為養分，但不該成為束縛未來的枷鎖。", "溫柔地面對受挫的狀態，即是真正的能量滋養。", "選擇愛與接納，糾葛的能量束便會開始鬆開。", "拒絕受害者模式，拿回生命能量的主導權。", "所有的療癒起始於願意「看見」受傷的內在限制。", "身體渴望健康，停止用負面信念進行評價與攻擊。", "每一天都是新的起點，有權重新設定生命藍圖。", "給予溫暖的肯定，能量場自然變得明亮。", "與內在連結時，外在的噪音不再是威脅。", "靈魂不需要被「修理」，只需要被深情地「看見」。", "允許感受真實，是與靈魂道路對焦的第一步。", "所有的障礙，都是邀請轉身向內探索的功課。", "寬恕並非原諒錯誤，而是為了歸還不屬於生命的能量。", "尊重長輩有其命運，但不必複製受苦的劇本。", "真正的忠誠，是活出屬於自己的路，而非繼承恐懼包袱。", "面對指責時保持覺察：那是對方的功課，與自身價值無關。", "建立清楚的能量界線，是愛護生命最直接的方式。", "感謝曾帶來傷害的因緣，這磨練出獨立與成長的韌性。", "親密關係的裂痕，往往是引導修復自我關係的契機。", "衝突是在測試是否能堅守內在價值觀。", "鬆開與父母的能量糾葛，方能真正獨立成人。", "溝通障礙的背後，往往藏著需要被看見的愛。", "不必討好所有人，光芒自然會吸引同頻率的相遇。", "愛不需要委曲求全，真正的愛是能量的對等流動。", "傾聽內在的聲音，那即是最權威的指導。", "放下控制欲望，讓關係在自然的節奏中生長。", "關係是一面鏡子，映照出尚未覺察的內在限制。", "真正的力量，是溫柔地說「不」。", "分辨建設性回饋與情緒性惡意攻擊。", "給予空間，同時也守住自身的神聖領域。", "所有的相遇，都是為了讓靈魂更趨向完整。", "靈魂道路不是通往遠方，而是回歸內在真實。", "面對人生障礙，是一場解鎖新技能的升級測驗。", "靜心冥想不只是休息，是清理能量慣性消耗的深層排毒。", "靈魂沒有走錯路，所有的挫折都是為了蓄積跳躍的能量。", "穿越受害者模式，便會發現原本就是光。", "福德因緣不是求來的，是透過愛、慈悲與利他創造的。", "宿世銘印可以被覺察，也可以在當下被重新定義。", "每一次情緒波盪，都是消融舊能量團的機會。", "真正的解脫，是卸下不再適合的靈魂包袱。", "靈性發展並非逃避，而是更有力地在現實中創造。", "保持好奇心，那是靈魂與宇宙溝通的訊號。", "振動頻率決定了吸引而來的人生機遇。", "面對死亡的恐懼，其實是對能量尚未綻放的遺憾。", "在大自然中活動，讓能量與地球共振。", "持續創新，是讓靈魂能量保持流動的最好方式。", "宇宙從不缺乏資源，只需要對豐盛給予認同。", "寬恕那些過往陰影，讓其回歸所屬的時空。", "這輩子唯一的責任，就是活出真正的自己。", "不要等到完美才出發，在不完美中修正才是高手的節奏。", "聚焦專注力，這是生命中最寶貴的資產。", "每日鏡子對話，修復看不見的內在傷痕。", "觀察語言，那是能量頻率的具體顯化。", "支付款項時默唸：祝福這筆能量流向更多需要的人。", "面對批評時深呼吸：這不代表生命的真實價值。", "感到壓力時，去覺察是哪個舊信念在作祟。", "每日進行感恩練習，是增長福德最快的路徑。", "遇到挑戰時問內在：這門功課想教導什麼新技能？", "尊重身體節奏，平衡工作、休閒與靈性成長。", "所有的修正都要貼著感受進行，而非邏輯。", "建立能量界線，對惡意不相應，對情緒做歸還。", "成功並非為了證明給誰看，而是為了連結靈魂的喜悅。", "相信直覺，那是靈魂穿越時空傳來的導航指令。", "每一刻的自我覺察，都在減少業力的慣性消耗。", "讓居住空間成為充滿愛與正向能量的場域。", "擁抱變化，因為變化是靈魂擴展視野的開端。", "宇宙的豐盛力量，一直在背後支持著每一個選擇。", "現在就開始，活出那個理想版本、閃閃發光的自己。", "來到世上是為了憶起真正的身分。", "痛苦是覺醒的催化劑，引領回歸生命路徑。", "生命的意義，是由每一個當下的覺察所賦予的。", "傷口是光進入的地方，裂痕讓能量得以交流。", "平衡生活與事業，才是真正的成功。", "標記上勇氣、慈悲與智慧，以此神聖身分安穩生活。", "放下對完美的執著，承認不完美也是一種真實的美。", "感恩產生療癒頻率，讓心從匱乏轉向豐盛。", "信任宇宙節奏，即便看不清全貌，一切都在路上。", "恐懼對面不是勇敢，這是對生命全然的信任。", "內在小孩一直在等待著，去聽聽他、抱抱他。", "覺得不夠好時是舊標籤，不代表真實的存在。", "靈魂不需要成功證明，這趟旅程只需要豐富經歷。", "保持初心，像孩子一樣對世界微小驚喜保持好奇。", "平常心就是道，在平凡中看見生命的神聖感。", "每一朵花在自己節奏中綻放，步調也可以如此自在。", "把心打開，不要帶著既定計畫，奇蹟才有位置進來。", "斷捨離不只是清物品，更是鬆動內在卡住的信念。", "憤怒升起時嘗試識別並命名它，慈悲安撫受驚的心。", "願身心平安健康，這份慈心祝福會改變氣場。", "逆境是包裹醜陋的禮物，耐心地拆開裡面藏著智慧。", "所有發生都具備意義，即便當下感覺是個挫折。", "心安理得是這個時代，最高級且最為珍貴的奢侈品。", "不隨環境起舞，心就是穩固的舵，帶領平安度過風暴。", "智慧在沈默中生根，在帶著覺察的行動中開花。", "當感覺被攻擊，其實是內在舊傷準備好被看見療癒了。"
+        ],
+        "重要決策": ["若感胸口緊繃，請先為決定緩一緩。","如果是「還可以」選擇，那就是「不」。","詢問你的心，而不是詢問你的恐懼。","在安靜森林或安靜房間裡做決定。","想像十年後你，如何看待現在的選擇。","如果不考慮錢會怎麼選？那就是答案。","投一枚硬幣，落地前你希望是哪一面。","好的決定讓你平靜，而不是興奮。","暫時放下睡一覺，醒來答案會更清晰。","尋求智者意見，但最後請聽從自己。","若決定基於愛而非恐懼，那就去做。","宇宙喜歡行動，決定了就全心投入。","現在不是最好時機，等一個月亮週期。","Yes！大膽地往前走，支援已在路上。","過多選擇耗能，試著減少選項。","問問自己：這符合我的核心價值觀嗎？","擴張感是「對」，縮小緊繃感是「錯」。","慢慢來，有時比較快。","這個決策是否能讓你獲得真正的自由。","不要為了逃避現在，而急著做決定。","答案就在夢境裡，留意晨間啟示。","先做一個小實驗，再決定全面投入。","相信第一直覺，後面都是腦袋干擾。","如果你猶豫不決，表示你還沒準備好。","向宇宙發請求，請它給你明確信號。","這個決定是否能為更多人帶來福祉。","勇敢說「不」，是為了對更重要的說「好」。","所有路徑最終通往成長與生命。","別人的建議是參考，你才是人生機長。","寫下優缺點，但最後用直覺決定。","當下即是最佳時機，不要等待完美。","繞一點路也沒關係，風景可能更優美。","放下對結果執著，專注於當下的行動。","你的靈魂深處，其實已知道答案了。","走那條讓你感到更有生命力的路。","帶著微笑，然後堅定出發。"]
+    };
+
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwi5iuc-COjsq5ab84OpRjgki3dRLXAFOywueWHCnq64FNbOVq0VpgcSVkz8x_Lb5yoiw/exec";
+
+    let selectedCat = "";
+    let selectedContent = "";
+    let isFinished = false;
+
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    const prizeDiv = document.getElementById('prize-text');
+    const statusDiv = document.getElementById('status');
+    const retryContainer = document.getElementById('retry-container');
+
+    function selectCategory(cat) {
+        selectedCat = cat;
+        const list = CONTENT_DATA[cat];
+        selectedContent = list[Math.floor(Math.random() * list.length)];
         
-        const quotesData = {
-            "專注力": ["專注於呼吸，就是給生命最好的禮物。", "一次只做一件事，心就不會累。", "你的心在哪裡，力量就在哪裡。"],
-            "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念。"],
-            "創造力": ["心空了，新的點子才能進來。", "創造力是靈魂在玩耍。", "在留白中，靈感自現。"],
-            "關係": ["最好的陪伴，是環境的聆聽。", "先愛自己，才能溫柔地愛別人。", "原諒是為了放過自己。"],
-            "照顧者": ["照顧別人前，請先抱抱疲憊的自己。", "你的好，不需要透過犧牲來證明。", "你已經做得很好了。"],
-            "復原力": ["失敗只是暫時的停頓，不是終點。", "內心的韌性，是在風雨中練就的。", "裂痕是光照進來的地方。"],
-            "健康": ["傾聽身體的細語，別等它大聲吶喊。", "長吐一口氣，啟動你的放鬆開關。", "今天的努力到此為止，安心入睡。"],
-            "工作": ["忙碌是表象，定心是功夫。", "壓力來臨時，先給自己三個呼吸。", "下班的那一刻，把工作留在門外。"],
-            "情緒": ["情緒如浪，來去自如，而你是大海。", "焦慮是靈魂跑得太快，停下來等它。", "快樂很好，不快樂也沒關係。"]
-        };
-
-        let selected = [];
-        const items = document.querySelectorAll('.cat-item');
-
-        items.forEach(item => {
-            item.onclick = () => {
-                const name = item.getAttribute('data-cat');
-                if (selected.includes(name)) {
-                    selected = selected.filter(i => i !== name);
-                    item.classList.remove('selected');
-                } else if (selected.length < 3) {
-                    selected.push(name);
-                    item.classList.add('selected');
-                    gtag('event', 'select_category', { 'category_name': name });
-                }
-                document.getElementById('counter').innerText = `請選擇 3 個議題 (已選: ${selected.length}/3)`;
-                if (selected.length === 3) setTimeout(goToScratch, 500);
-            };
-        });
-
-        function goToScratch() {
-            document.getElementById('home-page').classList.remove('active');
-            document.getElementById('scratch-page').classList.add('active');
-            document.getElementById('action-area').style.display = 'none';
-            
-            const results = selected.map(c => {
-                const pool = quotesData[c];
-                const q = pool[Math.floor(Math.random() * pool.length)];
-                return `<div class="quote-box"><strong># ${c}</strong><p>${q}</p></div>`;
-            }).join("");
-            
-            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.8rem; color:var(--primary-color); margin-top:15px; width:100%; text-align:center;'>願這份正念陪伴您的 2026</p>";
-            
-            initCanvas();
-            logToSheet();
-            gtag('event', 'start_scratch', { 'selected_topics': selected.join(', ') });
+        if (typeof gtag === 'function') {
+            gtag('event', 'select_content', { 'content_type': 'energy_category', 'item_id': cat });
         }
 
-        function initCanvas() {
-            const canvas = document.getElementById('scratchCanvas');
-            const card = document.getElementById('scratch-card');
-            const ctx = canvas.getContext('2d');
-            canvas.style.display = 'block'; // 確保重新開始時畫布顯示
-            canvas.width = card.offsetWidth; 
-            canvas.height = card.offsetHeight;
-            ctx.fillStyle = '#C0C0C0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#A9A9A9';
-            for(let i=0; i<100; i++) ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
-            ctx.font = "18px Arial"; ctx.fillStyle = "#888"; ctx.textAlign = "center";
-            ctx.fillText("帶著覺知刮開卡片", canvas.width/2, canvas.height/2);
+        document.getElementById('category-screen').classList.add('hidden');
+        document.getElementById('scratch-screen').style.display = 'block';
+        document.getElementById('top-msg').innerHTML = `已為您連結【${cat}】能量<br>請靜心刮開宇宙的叮嚀`;
+        initScratch();
+    }
 
-            let isDrawing = false;
-            function scratch(e) {
-                if(!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI*2); ctx.fill();
-                checkArea(ctx, canvas);
-            }
-            canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
-            window.addEventListener('mouseup', () => isDrawing = false);
-            window.addEventListener('touchend', () => isDrawing = false);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
-        }
+    function initScratch() {
+        isFinished = false;
+        canvas.style.opacity = '1';
+        canvas.classList.remove('hidden');
+        prizeDiv.innerText = selectedContent;
+        statusDiv.innerText = "";
+        retryContainer.classList.add('hidden');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#d4af37';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.shadowColor = "rgba(0,0,0,0.2)";
+        ctx.shadowBlur = 1;
+        ctx.fillStyle = '#c62828';
+        ctx.font = '900 24px "Noto Serif TC"'; 
+        ctx.textAlign = 'center';
+        ctx.fillText('請在這邊刮開內容', canvas.width/2, canvas.height/2 + 10);
 
-        function checkArea(ctx, canvas) {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imageData.data;
-            let transparent = 0;
-            for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) transparent++; }
-            if ((transparent / (canvas.width * canvas.height)) * 100 > 50) {
-                canvas.style.display = 'none'; // 💡 重要修正：刮完後隱藏畫布，釋放捲動限制
-                document.getElementById('action-area').style.display = 'flex';
-                gtag('event', 'scratch_complete');
-            }
-        }
+        updateLineShare(); // 初始化 Line 分享連結
 
-        async function logToSheet() {
-            try {
-                const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
-                const payload = {
-                    ip: ipData.ip, country: ipData.country_name,
-                    time: new Date().toLocaleString(),
-                    categories: selected.join(", "),
-                    content: document.getElementById('resultContainer').innerText.replace(/\n/g, " ")
-                };
-                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            } catch(e) { console.error("Log failed", e); }
-        }
+        canvas.addEventListener('mousedown', startScratch);
+        canvas.addEventListener('mousemove', scratch);
+        window.addEventListener('mouseup', stopScratch);
+        canvas.addEventListener('touchstart', startScratch, {passive:false});
+        canvas.addEventListener('touchmove', scratch, {passive:false});
+        canvas.addEventListener('touchend', stopScratch);
+    }
 
-        function shareLine() {
-            const url = "https://scwei.github.io/energy-scratch/mindfulness.html";
-            const text = `2026刮刮樂- 正念我的心\n\n1. 正念冥想30秒。\n2. 邀請您優先選擇三個最關心的議題\n(專注力、覺察力、創造力、關係、照顧者、復原力、健康、工作、情緒)\n\n3. 帶著覺知，刮出您的正念心靈卡\n\n2026刮刮樂- 正念我的心 -遊戲網址：${url}`;
-            gtag('event', 'share_line');
-            window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
+    function updateLineShare() {
+        const shareText = `新年就要玩心靈刮刮樂\n\n2026 正念慈心能量指引\n1. 請在內心默念您的問題\n2. 選擇您最關心的議題\n3. 領取宇宙給您的啟示\n\n心靈刮刮樂 網址：https://scwei.github.io/energy-scratch/wish.html`;
+        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(shareText)}`;
+        document.getElementById('line-share-btn').href = lineUrl;
+    }
+
+    let isDrawing = false;
+    function startScratch(e) { isDrawing = true; scratch(e); }
+    function stopScratch() { if(isDrawing) { isDrawing = false; checkScrape(); } }
+
+    function scratch(e) {
+        if (!isDrawing || isFinished) return;
+        if(e.cancelable) e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function checkScrape() {
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let clear = 0;
+        for (let i = 3; i < pixels.length; i += 4) if (pixels[i] === 0) clear++;
+        if ((clear / (canvas.width * canvas.height)) > 0.45) {
+            isFinished = true;
+            canvas.style.transition = 'opacity 0.6s';
+            canvas.style.opacity = '0';
+            setTimeout(autoRecord, 600);
         }
-    </script>
+    }
+
+    function autoRecord() {
+        canvas.classList.add('hidden');
+        statusDiv.innerText = "慢慢靜心體會...";
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({ category: selectedCat, content: selectedContent })
+        }).then(() => { finishAction(); }).catch(() => { finishAction(); });
+    }
+
+    function finishAction() {
+        statusDiv.innerHTML = "🙏 願這份啟示陪伴您，祝福2026年行大運。";
+        retryContainer.classList.remove('hidden');
+    }
+
+    function resetGame() {
+        document.getElementById('scratch-screen').style.display = 'none';
+        document.getElementById('category-screen').classList.remove('hidden');
+        document.getElementById('top-msg').innerHTML = "1. 請在內心默念您的問題<br>2. 選擇您最關心的議題<br>3. 領取宇宙給您的啟示";
+        statusDiv.innerText = "";
+        retryContainer.classList.add('hidden');
+    }
+</script>
+
 </body>
 </html>
