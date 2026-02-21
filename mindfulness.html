@@ -35,7 +35,7 @@
             background: white; 
             padding: 20px 15px; 
             border-radius: 15px; 
-            margin-bottom: 20px; 
+            margin-bottom: 25px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
             text-align: left;
         }
@@ -56,7 +56,6 @@
             cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem;
         }
         .cat-item.selected { transform: scale(1.03); border-width: 3px; }
-        /* 各類別選中色彩 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -67,7 +66,6 @@
         .cat-item[data-cat="工作"].selected { border-color: #456268; color: #456268; background: #f0f3f4; }
         .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; color: #ff4b5c; background: #fff2f3; }
 
-        /* 卡片區域：確保垂直置中 */
         #scratch-card {
             width: 100%; max-width: 320px; 
             min-height: 420px; 
@@ -75,24 +73,30 @@
             border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             position: relative; overflow: hidden;
         }
+        
+        /* 修正：將內容設為靠左對齊，並增加內縮間距 */
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; 
-            justify-content: center; /* 修正：使內容垂直置中 */
-            align-items: center; padding: 25px 20px; box-sizing: border-box; 
-            text-align: center; overflow-y: auto;
+            justify-content: center; 
+            align-items: flex-start; /* 改為靠左對齊 */
+            padding: 25px 35px; /* 增加左側內縮，讓文字不貼邊 */
+            box-sizing: border-box; 
+            text-align: left; /* 強制文字靠左 */
+            overflow-y: auto;
         }
-        .quote-box { margin-bottom: 15px; width: 100%; }
-        .quote-box p { margin: 5px 0; font-size: 1rem; line-height: 1.4; }
-        .quote-box strong { color: var(--primary-color); display: block; margin-bottom: 2px; font-size: 0.8rem; }
+        
+        .quote-box { margin-bottom: 20px; width: 100%; }
+        .quote-box p { margin: 5px 0; font-size: 1.05rem; line-height: 1.5; color: #333; }
+        .quote-box strong { color: var(--primary-color); display: block; margin-bottom: 4px; font-size: 0.85rem; letter-spacing: 1px; }
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
-        /* 按鈕區域：修正不置中問題 */
+        /* 按鈕置中優化 */
         #action-area {
             display: none;
             flex-direction: column;
-            align-items: center; /* 確保子元素水平置中 */
+            align-items: center;
             width: 100%;
         }
         .btn { 
@@ -106,7 +110,7 @@
             color: white; 
             cursor: pointer; 
             font-size: 1rem; 
-            margin: 10px auto; /* 確保按鈕本身置中 */
+            margin: 10px auto; 
             width: 90%; 
             max-width: 280px;
             box-sizing: border-box;
@@ -116,7 +120,7 @@
         .line-btn { background: #06C755 !important; }
         
         .footer-links { margin-top: 30px; border-top: 1px solid #ddd; padding: 20px 10px; font-size: 0.85rem; width: 100%; max-width: 450px; text-align: left; }
-        .footer-links h4 { margin-bottom: 6px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 8px; margin-top: 15px; }
+        .footer-links h4 { margin-bottom: 8px; color: #555; border-left: 4px solid var(--primary-color); padding-left: 8px; margin-top: 15px; }
         .footer-links a { color: #2c5d4d; text-decoration: none; display: block; margin: 6px 0; border-bottom: 1px dashed #eee; padding-bottom: 2px; }
     </style>
 </head>
@@ -127,7 +131,7 @@
         
         <div class="instruction-box">
             <ol>
-                <li>正念冥想 30 秒
+                <li>正念冥想 30 秒 (請閉上眼感受呼吸)
                     <span class="meditation-quote">「輕輕閉上眼，感受身體，準備好時請張開眼選擇」</span>
                 </li>
                 <li>選擇三個最關心的議題</li>
@@ -210,7 +214,7 @@
         function goToScratch() {
             document.getElementById('home-page').classList.remove('active');
             document.getElementById('scratch-page').classList.add('active');
-            document.getElementById('action-area').style.display = 'none'; // 初始隱藏
+            document.getElementById('action-area').style.display = 'none';
             
             const results = selected.map(c => {
                 const pool = quotesData[c];
@@ -218,7 +222,8 @@
                 return `<div class="quote-box"><strong># ${c}</strong><p>${q}</p></div>`;
             }).join("");
             
-            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px;'>願這份正念陪伴您的 2026</p>";
+            // 下方結語改為靠左，保持風格統一
+            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px; width:100%; text-align:left;'>願這份正念陪伴您的 2026</p>";
             
             initCanvas();
             logToSheet();
@@ -264,7 +269,7 @@
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) transparent++; }
             if ((transparent / (canvas.width * canvas.height)) * 100 > 50) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                document.getElementById('action-area').style.display = 'flex'; // 顯示並維持 Flex 居中
+                document.getElementById('action-area').style.display = 'flex';
                 gtag('event', 'scratch_complete');
             }
         }
