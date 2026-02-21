@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 正念我的心 | 刮刮樂能量祝福</title>
+    <style>
+        :root {
+            --primary-green: #5b8e7d;
+            --bg-color: #f8f9fa;
+            --silver: #C0C0C0;
+        }
+        
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        h1 { color: #2c5d4d; margin-bottom: 5px; letter-spacing: 2px; }
+        .subtitle { color: #666; font-size: 0.9rem; }
+
+        /* 分類選擇區 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 360px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .cat-item {
+            padding: 15px 5px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-align: center;
+            background: white;
+        }
+
+        /* 各分類特定色彩 */
+        .cat-item[data-cat="專注力"].selected { border-color: #1a508b; background: #eef5ff; color: #1a508b; }
+        .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; background: #f9f2fa; color: #6a097d; }
+        .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; background: #fff4f1; color: #ff8e71; }
+        .cat-item[data-cat="關係"].selected { border-color: #ffb6b9; background: #fff0f0; color: #ffb6b9; }
+        .cat-item[data-cat="照顧者"].selected { border-color: #00a8cc; background: #f0faff; color: #00a8cc; }
+        .cat-item[data-cat="復原力"].selected { border-color: #a39193; background: #f4f1f1; color: #a39193; }
+        .cat-item[data-cat="健康"].selected { border-color: #81b214; background: #f5f9ed; color: #81b214; }
+        .cat-item[data-cat="工作"].selected { border-color: #456268; background: #f0f3f4; color: #456268; }
+        .cat-item[data-cat="情緒"].selected { border-color: #ff4b5c; background: #fff2f3; color: #ff4b5c; }
+
+        .btn-start {
+            margin-top: 25px;
+            padding: 12px 40px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(91,142,125,0.3);
+            display: none;
+        }
+
+        /* 刮刮樂區域 */
+        #scratch-section {
+            display: none;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        #scratch-card {
+            width: 320px;
+            height: 450px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .quote-box { margin-bottom: 20px; }
+        .quote-tag { font-size: 0.7rem; color: #999; margin-bottom: 5px; display: block; }
+        .quote-text { font-size: 1rem; line-height: 1.5; color: #333; font-weight: 500; }
+
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+            cursor: url('https://cdn-icons-png.flaticon.com/32/1484/1484568.png'), auto;
+            touch-action: none;
+        }
+
+        .action-btns { margin-top: 20px; display: none; flex-direction: column; gap: 10px; width: 320px;}
+        .line-btn { background: #06C755; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; text-decoration: none; font-weight: bold; }
+
+        footer { margin-top: 50px; padding: 20px; text-align: center; font-size: 0.9rem; }
+        footer a { color: #5b8e7d; text-decoration: none; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>2026 正念我的心</h1>
+    <div class="subtitle">邀請您優先選擇三個最關心的議題</div>
+</header>
+
+<div class="grid-container" id="categoryGrid">
+    <div class="cat-item" data-cat="專注力">專注力</div>
+    <div class="cat-item" data-cat="覺察力">覺察力</div>
+    <div class="cat-item" data-cat="創造力">創造力</div>
+    <div class="cat-item" data-cat="關係">關係</div>
+    <div class="cat-item" data-cat="照顧者">照顧者</div>
+    <div class="cat-item" data-cat="復原力">復原力</div>
+    <div class="cat-item" data-cat="健康">健康</div>
+    <div class="cat-item" data-cat="工作">工作</div>
+    <div class="cat-item" data-cat="情緒">情緒</div>
+</div>
+
+<button id="startBtn" class="btn-start">開始刮出能量金句</button>
+
+<section id="scratch-section">
+    <div id="scratch-card">
+        <div class="result-container" id="resultBox">
+            </div>
+        <canvas id="scratchCanvas"></canvas>
+    </div>
+    
+    <div class="action-btns" id="actionBtns">
+        <button class="line-btn" onclick="shareLine()">🍀 LINE 分享祝福</button>
+        <button onclick="location.reload()" style="background:none; border:1px solid #ccc; padding:8px; border-radius:10px; cursor:pointer;">重新選取</button>
+    </div>
+</section>
+
+<footer>
+    <a href="#">近期活動 ✨</a> | <a href="#">學習資源 📖</a>
+</footer>
+
+<script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzLYgoIPlt_XHe8yZ8iVuc392FDcSXQDnzszBZxNjNZA5r7j1k2mZ0kVdS_GnGNX-2m/exec";
+
+    // 隨機金句資料庫 (這裡放入之前生成的300句範例，實務上可展開)
+    const quotesData = {
+        "專注力": ["專注於呼吸，就是給生命最好的禮物。", "一次只做一件事，心就不會累。", "你的心在哪裡，力量就在哪裡。", "慢下來，是為了看清最核心的事。"],
+        "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念的開始。", "溫柔地看著你的不安，它會慢慢安靜。"],
+        "創造力": ["心空了，新的點子才能進來。", "創造力是靈魂在玩耍。", "在留白中，靈感自現。", "每一刻的覺察，都是新的創作素材。"],
+        "關係": ["最好的陪伴，是放下手機的聆聽。", "先愛自己，才能溫柔地愛別人。", "在關係中保有自我，愛才不會沉重。", "原諒不是為了別人，是為了放過自己。"],
+        "照顧者": ["照顧別人前，請先抱抱疲憊的自己。", "你的好，不需要透過犧牲來證明。", "你已經做得很好了，放輕鬆點。", "休息不是偷懶，是為了走更遠的路。"],
+        "復原力": ["失敗只是暫時的停頓，不是終點。", "內心的韌性，是在風雨中練就的。", "接納脆弱，正是堅強的表現。", "裂痕是光照進來的地方。"],
+        "健康": ["傾聽身體的細語，別等它大聲吶喊。", "長吐一口氣，啟動你的放鬆開關。", "今天的努力到此為止，安心入睡。", "每一口呼吸，都在更新你的細胞。"],
+        "工作": ["忙碌是表象，定心是功夫。", "壓力來臨時，先給自己三個呼吸。", "下班的那一刻，把工作留在門外。", "工作的價值，由你內心的平靜定義。"],
+        "情緒": ["情緒如浪，來去自如，而你是廣闊的大海。", "看見憤怒，而不成為憤怒。", "焦慮是靈魂跑得太快，請停下來等一等它。", "快樂很好，不快樂也沒關係。"]
+    };
+
+    let selectedCats = [];
+    const gridItems = document.querySelectorAll('.cat-item');
+    const startBtn = document.getElementById('startBtn');
+
+    gridItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const cat = item.getAttribute('data-cat');
+            if (selectedCats.includes(cat)) {
+                selectedCats = selectedCats.filter(i => i !== cat);
+                item.classList.remove('selected');
+            } else if (selectedCats.length < 3) {
+                selectedCats.push(cat);
+                item.classList.add('selected');
+            }
+            startBtn.style.display = selectedCats.length === 3 ? 'block' : 'none';
+        });
+    });
+
+    startBtn.addEventListener('click', initScratch);
+
+    function initScratch() {
+        document.getElementById('categoryGrid').style.display = 'none';
+        startBtn.style.display = 'none';
+        document.querySelector('.subtitle').style.display = 'none';
+        document.getElementById('scratch-section').style.display = 'flex';
+        document.getElementById('scratch-section').style.flexDirection = 'column';
+        document.getElementById('scratch-section').style.alignItems = 'center';
+
+        // 抽取金句
+        const results = selectedCats.map(cat => {
+            const pool = quotesData[cat];
+            return { cat: cat, text: pool[Math.floor(Math.random() * pool.length)] };
+        });
+
+        const resultBox = document.getElementById('resultBox');
+        resultBox.innerHTML = results.map(r => `
+            <div class="quote-box">
+                <span class="quote-tag"># ${r.cat}</span>
+                <div class="quote-text">${r.text}</div>
+            </div>
+        `).join('');
+
+        setupCanvas();
+        sendDataToSheet(results.map(r => `[${r.cat}]${r.text}`).join(' / '));
+    }
+
+    function setupCanvas() {
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 320;
+        canvas.height = 450;
+
+        // 繪製銀色層
+        ctx.fillStyle = '#C0C0C0';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // 加上一點紋理感
+        ctx.fillStyle = '#A9A9A9';
+        for(let i=0; i<100; i++) {
+            ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
+        }
+
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#888";
+        ctx.textAlign = "center";
+        ctx.fillText("請在此刮開能量", 160, 225);
+
+        let isDrawing = false;
+        let scratchedAmount = 0;
+
+        function getPointerPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const pos = getPointerPos(e);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 30, 0, Math.PI * 2);
+            ctx.fill();
+            checkScratch();
+        }
+
+        function checkScratch() {
+            scratchedAmount++;
+            if (scratchedAmount > 50) { // 簡單門檻
+                document.getElementById('actionBtns').style.display = 'flex';
+            }
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('touchstart', () => isDrawing = true);
+        window.addEventListener('mouseup', () => isDrawing = false);
+        window.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchmove', scratch);
+    }
+
+    async function sendDataToSheet(content) {
+        try {
+            const ipRes = await fetch('https://ipapi.co/json/');
+            const ipData = await ipRes.json();
+            
+            const payload = {
+                ip: ipData.ip,
+                country: ipData.country_name,
+                time: new Date().toLocaleString(),
+                categories: selectedCats.join(', '),
+                content: content
+            };
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) { console.log("Logging failed", e); }
+    }
+
+    function shareLine() {
+        const msg = encodeURIComponent(`【2026 正念我的心】\n我為自己刮開了「${selectedCats.join('、')}」的能量祝福，感覺心靈被療癒了！✨\n你也來刮出你的年度金句吧！網址：https://scwei.github.io/energy-scratch/mindfulness.html `);
+        window.location.href = `https://line.me/R/msg/text/?${msg}`;
+    }
+</script>
+
+</body>
+</html>
