@@ -6,7 +6,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SJRWZ6J7Y5');
+      gtag('config', 'G-SJRWZ6J7Y5'); // 整合 GA ID
     </script>
 
     <meta charset="UTF-8">
@@ -31,6 +31,7 @@
 
         header h1 { color: #2c5d4d; font-size: 1.4rem; margin-bottom: 10px; }
         
+        /* 首頁說明文字 */
         .instruction-box { 
             background: white; 
             padding: 20px 15px; 
@@ -56,6 +57,8 @@
             cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem;
         }
         .cat-item.selected { transform: scale(1.03); border-width: 3px; }
+        
+        /* 各類別選中色彩 */
         .cat-item[data-cat="專注力"].selected { border-color: #1a508b; color: #1a508b; background: #eef5ff; }
         .cat-item[data-cat="覺察力"].selected { border-color: #6a097d; color: #6a097d; background: #f9f2fa; }
         .cat-item[data-cat="創造力"].selected { border-color: #ff8e71; color: #ff8e71; background: #fff4f1; }
@@ -74,25 +77,42 @@
             position: relative; overflow: hidden;
         }
         
-        /* 修正：將內容設為靠左對齊，並增加內縮間距 */
+        /* 內容容器：維持垂直置中 */
         .result-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; 
             justify-content: center; 
-            align-items: flex-start; /* 改為靠左對齊 */
-            padding: 25px 35px; /* 增加左側內縮，讓文字不貼邊 */
+            align-items: center; 
+            padding: 25px 30px; 
             box-sizing: border-box; 
-            text-align: left; /* 強制文字靠左 */
             overflow-y: auto;
         }
         
         .quote-box { margin-bottom: 20px; width: 100%; }
-        .quote-box p { margin: 5px 0; font-size: 1.05rem; line-height: 1.5; color: #333; }
-        .quote-box strong { color: var(--primary-color); display: block; margin-bottom: 4px; font-size: 0.85rem; letter-spacing: 1px; }
+        
+        /* 修正：分類標籤水平置中 */
+        .quote-box strong { 
+            color: var(--primary-color); 
+            display: block; 
+            margin-bottom: 6px; 
+            font-size: 0.85rem; 
+            letter-spacing: 1px; 
+            text-align: center; 
+        }
+        
+        /* 修正：金句內容靠左對齊 */
+        .quote-box p { 
+            margin: 0; 
+            font-size: 1.05rem; 
+            line-height: 1.5; 
+            color: #333; 
+            text-align: left; 
+            width: 100%;
+        }
 
         canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; border-radius: 20px; }
 
-        /* 按鈕置中優化 */
+        /* 按鈕區域置中 */
         #action-area {
             display: none;
             flex-direction: column;
@@ -184,7 +204,7 @@
             "專注力": ["專注於呼吸，就是給生命最好的禮物。", "一次只做一件事，心就不會累。", "你的心在哪裡，力量就在哪裡。"],
             "覺察力": ["覺察情緒的起伏，但不被它帶走。", "看見，就是轉變的開始。", "發現分心的瞬間，就是正念。"],
             "創造力": ["心空了，新的點子才能進來。", "創造力是靈魂在玩耍。", "在留白中，靈感自現。"],
-            "關係": ["最好的陪伴，是放下手機的聆聽。", "先愛自己，才能溫柔地愛別人。", "原諒是為了放過自己。"],
+            "關係": ["最好的陪伴，是環境的聆聽。", "先愛自己，才能溫柔地愛別人。", "原諒是為了放過自己。"],
             "照顧者": ["照顧別人前，請先抱抱疲憊的自己。", "你的好，不需要透過犧牲來證明。", "你已經做得很好了。"],
             "復原力": ["失敗只是暫時的停頓，不是終點。", "內心的韌性，是在風雨中練就的。", "裂痕是光照進來的地方。"],
             "健康": ["傾聽身體的細語，別等它大聲吶喊。", "長吐一口氣，啟動你的放鬆開關。", "今天的努力到此為止，安心入睡。"],
@@ -222,8 +242,7 @@
                 return `<div class="quote-box"><strong># ${c}</strong><p>${q}</p></div>`;
             }).join("");
             
-            // 下方結語改為靠左，保持風格統一
-            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px; width:100%; text-align:left;'>願這份正念陪伴您的 2026</p>";
+            document.getElementById('resultContainer').innerHTML = results + "<p style='font-size:0.75rem; color:var(--primary-color); margin-top:10px; width:100%; text-align:center;'>願這份正念陪伴您的 2026</p>";
             
             initCanvas();
             logToSheet();
